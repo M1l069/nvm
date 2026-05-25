@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+    mysql:
+        image: mysql:latest
+        container_name: mysql-container
+        restart: unless-stopped
+        environment:
+            MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+            MYSQL_DATABASE: app
+        ports:
+            - "3307:3306"
+        volumes:
+            - mysql-data:/var/lib/mysql
+
+    phpmyadmin:
+        image: phpmyadmin:latest
+        container_name: phpmyadmin-container
+        restart: unless-stopped
+        ports:
+            - "8080:80"
+        environment:
+            PMA_HOST: mysql
+            PMA_PORT: 3306
+            PMA_AUTH_TYPE: cookie
+            PMA_ALLOW_NO_PASSWORD: "1"
+        depends_on:
+            - mysql
+
+volumes:
+    mysql-data:
