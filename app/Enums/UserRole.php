@@ -7,7 +7,7 @@ enum UserRole: string
     case Admin = 'admin';
     case Student = 'student';
     case Teacher = 'teacher';
-    case Parent = 'parent';
+    case Parent = 'guardian';
 
     public function label(): string
     {

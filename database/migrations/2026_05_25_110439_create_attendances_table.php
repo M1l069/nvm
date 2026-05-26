@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('lesson_id')->constrained()->cascadeOnDelete();
-            $table->string('state')->default(AttendaceState::Present->value);
-            $table->unique(['student_id', 'lesson_id']);
+            $table->string('state')->default(\App\Enums\AttendanceState::Present->value);
+            $table->unique(['user_id', 'lesson_id']);
             $table->timestamps();
         });
     }

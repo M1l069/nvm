@@ -22,6 +22,7 @@ return new class extends Migration
             $table->boolean('must_change_password')->default(true);
             $table->string('role')->default(UserRole::Student->value);
             $table->rememberToken();
+            $table->softDeletes();
             $table->timestamps();
         });
 
