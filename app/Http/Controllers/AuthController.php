@@ -32,6 +32,12 @@ class AuthController extends Controller
 
 
          if(Auth::attempt($credentials, $remember)) {
+             $request->session()->regenerate();
+
+//             if(auth()->user()->must_change_password) {
+//                 return redirect()->route('user.change-password.edit');
+//             }
+
              return redirect()->intended('/');
          }
 
@@ -43,17 +49,18 @@ class AuthController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function editPassword()
     {
-        //
+        return view('auth.edit');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function updatePassword(Request $request)
     {
-        //
+
+
     }
 
     /**

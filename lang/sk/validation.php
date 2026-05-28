@@ -157,7 +157,16 @@ return [
     'url'                    => ':Attribute musí mať formát URL.',
     'uuid'                   => ':Attribute musí byť platné UUID.',
     'attributes' => [
-        'username' => 'používateľské meno',
-        'password' => 'heslo',
+        'username' => 'Používateľské meno',
+        'password' => 'Heslo',
+        'specialization' => 'Špecializácia',
+        'first-name' => 'Meno',
+        'surename' => 'Priezvisko',
+        'phone_number' => 'Tel. č.',
+        'street' => 'Ulica',
+        'postal_code' => 'PSČ',
+        'city' => 'Mesto',
+        'country' => 'Krajina',
+        'birth_date' => 'Dátum narodenia'
     ],
 ];
