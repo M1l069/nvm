@@ -17,7 +17,7 @@
                         @class(['w-full rounded-md border px-4 py-2 text-base
                         placeholder:text-slate-400 focus:border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200',
                         'border-red-300' => $errors->has('username'),
-                        'border-slate-300' => !$errors->has('username')])>
+                        'border-slate-300' => !$errors->has('username')]) value="{{ old('username') }}">
                     @error('username')
                     <div class="mt-1 text-sm text-red-500">
                         {{ $message }}
@@ -92,11 +92,17 @@
                     </div>
                 </div>
 
+                <div class="flex justify-start space-x-2">
+                    <input class="cursor-pointer rounded-sm border border-slate-400" type="checkbox" name="remember" id="remember">
+                    <label for="remember" class="cursor-pointer">Zapamätať si ma</label>
+                </div>
+
                 <div class="pt-2 flex justify-end">
                     <button
                         type="submit"
-                        class="w-full cursor-pointer rounded-md bg-yellow-300 px-4 py-3 font-medium text-black shadow-md hover:bg-yellow-500 sm:w-auto sm:px-6"
-                    >
+                        class="w-full cursor-pointer rounded-md
+                        bg-yellow-300 px-4 py-3 font-medium text-black shadow-md
+                        hover:bg-yellow-500 sm:w-auto sm:px-6">
                         Prihlásiť sa
                     </button>
                 </div>

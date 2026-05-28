@@ -15,7 +15,6 @@ return new class extends Migration
 //            $table->id();
             $table->foreignId('guardian_id')->constrained()->cascadeOnDelete();
             $table->foreignId('student_id')->constrained()->cascadeOnDelete();
-            $table->string('relationship');
             $table->primary(['guardian_id', 'student_id']);
             $table->timestamps();
         });

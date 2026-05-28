@@ -94,6 +94,7 @@
             <x-nav-link-phone href="/events" href-name="events">Udalosti</x-nav-link-phone>
 
             @auth
+                <x-nav-link-phone href="{{ route('profile') }}" href-name="profile">Profil</x-nav-link-phone>
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
                     @method('DELETE')

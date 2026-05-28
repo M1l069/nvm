@@ -2,8 +2,10 @@
 
 namespace App\View\Components\Dashboard;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\Component;
 
 class Admin extends Component
@@ -11,7 +13,9 @@ class Admin extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct()
+    public function __construct(public ?User $user = null,
+                                public ?Collection $bands = null,
+                                public ?Collection $events = null)
     {
         //
     }

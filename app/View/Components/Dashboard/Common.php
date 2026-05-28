@@ -7,7 +7,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class Guardian extends Component
+class Common extends Component
 {
     /**
      * Create a new component instance.
@@ -22,6 +22,6 @@ class Guardian extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.dashboard.guardian');
+        return view('components.dashboard.common');
     }
 }

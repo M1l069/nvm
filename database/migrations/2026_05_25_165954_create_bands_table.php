@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('teacher_id')->nullable()->constrained('teachers')->nullOnDelete();
             $table->unsignedInteger('capacity');
+            $table->string('name');
             $table->text('description')->nullable();
             $table->softDeletes();
             $table->timestamps();

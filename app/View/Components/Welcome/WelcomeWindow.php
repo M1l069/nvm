@@ -1,18 +1,17 @@
 <?php
 
-namespace App\View\Components\Dashboard;
+namespace App\View\Components\Welcome;
 
-use App\Models\User;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class Guardian extends Component
+class WelcomeWindow extends Component
 {
     /**
      * Create a new component instance.
      */
-    public function __construct(public ?User $user = null)
+    public function __construct(public ?string $sectionName = null)
     {
         //
     }
@@ -22,6 +21,6 @@ class Guardian extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.dashboard.guardian');
+        return view('components.welcome.welcome-window');
     }
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\View\Components\Dashboard;
+namespace App\View\Components\Profile;
 
 use App\Models\User;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class Guardian extends Component
+class UserInfo extends Component
 {
     /**
      * Create a new component instance.
@@ -22,6 +22,6 @@ class Guardian extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.dashboard.guardian');
+        return view('components.profile.user-info');
     }
 }

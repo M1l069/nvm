@@ -14,8 +14,7 @@ class Guardian extends Model
     public function user():BelongsTo { return $this->belongsTo(User::class); }
 
     public function students():BelongsToMany {
-        return $this->belongsToMany(Student::class, 'guardian_student')
-            ->withPivot('relationship');
+        return $this->belongsToMany(Student::class, 'guardian_student');
     }
 
 }

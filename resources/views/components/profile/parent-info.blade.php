@@ -1,0 +1,10 @@
+<hr class="border-slate-300 col-span-1 sm:col-span-2">
+<div class="col-span-2 font-medium"> Zákonný zástupca žiaka</div>
+<div class="text-slate-500 font-medium">Meno Rodiča: </div>
+<div class="text-slate-500">{{ $parent->user->name }}</div>
+<div class="text-slate-500 font-medium">Používateľské meno rodiča: </div>
+<div class="text-slate-500">{{ $parent->user->username }}</div>
+<div class="text-slate-500 font-medium">E-mail rodiča: </div>
+<div class="text-slate-500">{{ $parent->user->email }}</div>
+<div class="text-slate-500 font-medium">Tel. č. rodiča: </div>
+<div class="text-slate-500">{{ $parent->phone_number }}</div>
