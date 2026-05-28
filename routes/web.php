@@ -15,6 +15,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
     Route::delete('auth', [AuthController::class, 'destroy'])->name('logout');
+    Route::get('change-password', [AuthController::class, 'editPassword'])
+        ->name('user.change-password.edit');
+    Route::patch('change-password', [AuthController::class, 'updatePassword'])
+        ->name('user.change-password.update');
 
     Route::get('profile', [ProfileController::class, 'show'])->name('profile');
 

@@ -52,16 +52,14 @@ class StudentController extends Controller
              'user_id' => $user->id,
              'specialization_id' => $data['specialization'],
              'birth_date' => $data['birth_date'],
-             'phone_number' => phone($data['phone_number'], 'SK')->formatE164(),
+             'phone_number' => empty($data['phone_number']) ? null : phone($data['phone_number'], 'SK')->formatE164(),
              'street' => $data['street'],
              'city' => $data['city'],
              'postal_code' => $data['postal_code'],
              'country' => $data['country']
          ]);
-
          return redirect()->route('students.index')
              ->with('success', 'Žiak úspešne vytvorený');
-
     }
 
     /**

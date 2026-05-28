@@ -2,7 +2,7 @@
     <div class="flex items-center justify-center px-4 py-10 sm:items-center sm:py-16">
         <article class="w-full max-w-lg rounded-xl border border-slate-300 bg-white p-6 shadow-md sm:p-8">
             <h1 class="mb-8 text-center text-3xl font-semibold sm:text-4xl">{{ $formName }}</h1>
-            <form action="{{ route($routeName) }}" class="space-y-5">
+            <form action="{{ route($routeName) }}" class="space-y-5" method="POST">
                 @csrf
             {{ $slot }}
             <div class="mt-3 pt-2 flex justify-end">

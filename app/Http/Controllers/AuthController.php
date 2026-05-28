@@ -34,9 +34,9 @@ class AuthController extends Controller
          if(Auth::attempt($credentials, $remember)) {
              $request->session()->regenerate();
 
-//             if(auth()->user()->must_change_password) {
-//                 return redirect()->route('user.change-password.edit');
-//             }
+             if(auth()->user()->must_change_password) {
+                 return redirect()->route('user.change-password.edit');
+             }
 
              return redirect()->intended('/');
          }
