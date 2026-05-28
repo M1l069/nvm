@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
@@ -59,7 +61,17 @@ class AuthController extends Controller
      */
     public function updatePassword(Request $request)
     {
+        $data = $request->validate([
+            'password' => ['required', 'confirmed', Password::min(8)->letters()->numbers()]
+        ]);
 
+        $user = $request->user();
+        $user->update([
+            'password' => Hash::make($data['password']),
+            'must_change_password' => false
+        ]);
+
+        return redirect()->route('home')->with('success', 'Heslo bolo úspešne zmenené');
 
     }
 

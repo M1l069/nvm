@@ -58,7 +58,7 @@ class StudentController extends Controller
              'postal_code' => $data['postal_code'],
              'country' => $data['country']
          ]);
-         return redirect()->route('students.index')
+         return redirect()->route('students.show', $student)
              ->with('success', 'Žiak úspešne vytvorený');
     }
 
