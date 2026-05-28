@@ -7,6 +7,7 @@ use App\Http\Requests\StudentRequest;
 use App\Models\Specialization;
 use App\Models\Student;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -58,6 +59,13 @@ class StudentController extends Controller
              'postal_code' => $data['postal_code'],
              'country' => $data['country']
          ]);
+
+//         if(Carbon::parse($student->birth_date)->greaterThan(now()->subYears(18))) {
+//             return redirect()->route('guardians.edit', $student)
+//                 ->with('success', 'Študent úspešne vytvorený. Prosím vytvorte konto
+//                 jeho zákonným zástupcom');
+//         }
+
          return redirect()->route('students.show', $student)
              ->with('success', 'Žiak úspešne vytvorený');
     }
