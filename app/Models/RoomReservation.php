@@ -10,8 +10,9 @@ class RoomReservation extends Model
     protected function casts(): array
     {
         return [
-            'start_at' => 'datetime',
-            'end_at' => 'datetime',
+            'from' => 'datetime',
+            'to' => 'datetime',
+            'status' => 'boolean'
         ];
     }
 

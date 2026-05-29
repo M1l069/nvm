@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\EnrollmentState;
+use App\Enums\GradeType;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Model;
@@ -37,8 +39,14 @@ class Student extends Model
     {
         return $this->belongsToMany(Band::class, 'band_student');
     }
-    public function isAdult(): bool
+
+    public function activeEnrollments()
     {
-        return $this->birth_date->age >= 18;
+        return $this->enrollments()->where('state', EnrollmentState::Active);
+    }
+
+    public function finalGrades()
+    {
+        return $this->grades()->where('type', GradeType::Final);
     }
 }

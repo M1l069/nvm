@@ -70,7 +70,7 @@ class StudentController extends Controller
 //         }
 
          return redirect()->route('students.show', $student)
-             ->with('success', 'Žiak úspešne vytvorený');
+             ->with('success', 'Žiak úspešne vytvorený s dočasným heslo: ');
     }
 
     /**

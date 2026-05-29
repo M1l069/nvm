@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\GradeType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,6 +12,7 @@ class Grade extends Model
     use SoftDeletes;
     protected function casts(): array {
         return [
+            'type' => GradeType::class,
             'graded_at' => 'datetime'
         ];
     }

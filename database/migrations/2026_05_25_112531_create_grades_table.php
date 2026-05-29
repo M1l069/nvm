@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('lesson_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('grade_event_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('value');
+            $table->string('type')->default(\App\Enums\GradeType::Continuous->value);
             $table->softDeletes();
             $table->index(['student_id', 'subject_school_year_id']);
             $table->timestamps();

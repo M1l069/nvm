@@ -10,7 +10,7 @@
                 <th class="px-4 py-3 text-left text-sm font-semibold">Odbor</th>
                 <th class="px-4 py-3 text-left text-sm font-semibold">Špecializácia</th>
                 <th class="px-4 py-3 text-left text-sm font-semibold">Dátum narodenia</th>
-                <th class="px-4 py-3 text-left text-sm font-semibold">Mesto</th>
+                <th class="px-4 py-3 text-left text-sm font-semibold">Bydlisko</th>
                 @if(auth()->user()->role === \App\Enums\UserRole::Admin)
                     <th class="px-4 py-3 text-right text-sm font-semibold">Akcie</th>
                 @endif
@@ -27,7 +27,9 @@
                     </td>
                     <td class="px-4 py-3">
                         @forelse($student->guardians as $guardian)
+                            <a href="#" class="hover:text-blue-700">
                             {{ $guardian->user->name }}
+                            </a>
                         @empty
                             -
                         @endforelse
@@ -49,7 +51,7 @@
                         {{ $student->birth_date->format('d. m. Y') }}
                     </td>
                     <td class="px-4 py-3">
-                        {{ $student->city }}
+                        {{ $student->street }}, {{ $student->postal_code }}  {{ $student->city }}, {{ $student->country }}
                     </td>
                     @if(auth()->user()->role === \App\Enums\UserRole::Admin)
                     <td class="px-4 py-3 text-right">

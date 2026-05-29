@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('specialization_id')->nullable()
                 ->constrained('specializations')->nullOnDelete();
             $table->foreignId('room_id')->nullable()->constrained()->nullOnDelete();
-            $table->boolean('status')->default(true);
+            $table->boolean('is_available')->default(true);
             $table->softDeletes();
             $table->timestamps();
         });

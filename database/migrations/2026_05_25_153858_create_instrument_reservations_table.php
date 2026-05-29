@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('status')->default(InstrumentReservationStatus::Reserved);
             $table->index(['instrument_id', 'from', 'to']);
             $table->timestamps();
+            $table->index(['instrument_id', 'from', 'to']);
         });
     }
 

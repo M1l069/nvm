@@ -29,7 +29,6 @@ class Lesson extends Model
     public function timeSlot():BelongsTo { return $this->belongsTo(TimeSlot::class); }
     public function attendances():HasMany { return $this->hasMany(Attendance::class); }
     public function grades():HasMany { return $this->hasMany(Grade::class); }
-    public function notes():HasMany { return $this->hasMany(Note::class); }
     public function gradeEvents():HasMany { return $this->hasMany(GradeEvent::class); }
 
 }

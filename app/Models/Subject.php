@@ -9,6 +9,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Subject extends Model
 {
     use SoftDeletes;
+    protected function casts(): array
+    {
+        return [
+            'grade_level' => 'integer',
+        ];
+    }
 
     public function department():BelongsTo { return $this->belongsTo(Department::class); }
     public function specialization():BelongsTo { return $this->belongsTo(Specialization::class); }
