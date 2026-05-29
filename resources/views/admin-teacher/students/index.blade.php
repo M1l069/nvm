@@ -78,7 +78,7 @@
                         <form action="{{ route('students.destroy', $student) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                        <button class="cursor-pointer text-sm text-red-500 hover:text-red-700">
+                        <button class="cursor-pointer text-sm text-orange-500 hover:text-orange-700">
                             Vymazať
                         </button>
                         </form>
@@ -88,6 +88,15 @@
                                 @method('PATCH')
                                 <button class="cursor-pointer text-sm text-blue-700 hover:text-blue-900">
                                     Obnoviť
+                                </button>
+                            </form>
+
+                            <form action="{{ route('students.forceDelete', $student) }}" method="POST"
+                                  onsubmit="return confirm('Naozaj chcete žiaka trvalo vymazať ? Táto akcia sa nedá vrátiť späť.')">
+                                @csrf
+                                @method('DELETE')
+                                <button class="cursor-pointer text-sm text-orange-500 hover:text-orange-700">
+                                    Trvalo vymazať
                                 </button>
                             </form>
                         @endif

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GuardianController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
@@ -32,5 +33,10 @@ Route::middleware('auth')->group(function () {
         ->only(['store', 'create', 'destroy', 'update', 'edit'])->middleware('admin');
     Route::patch('students/{student}/restore', [StudentController::class, 'restore'])->name('students.restore')
         ->middleware('admin');
+    Route::delete('students/{student}/forceDelete', [StudentController::class, 'forceDelete'])
+        ->middleware('admin')->name('students.forceDelete');
     Route::resource('students', StudentController::class)->only('show')->withTrashed(['show']); // toto všetci prihlásený
+
+    // Cesty pre zákonného zástupcu
+    Route::resource('guardians', GuardianController::class)->only('show')->withTrashed(['show']);
 });

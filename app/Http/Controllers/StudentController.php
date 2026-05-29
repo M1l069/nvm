@@ -9,6 +9,7 @@ use App\Models\Student;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -19,6 +20,7 @@ class StudentController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', Student::class);
         $students = Student::withTrashed()->with('specialization.department',
             'bands', 'guardians')->latest()->paginate();
 
@@ -30,6 +32,7 @@ class StudentController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', Student::class);
         $specializations = Specialization::latest()->get();
         return view('admin.students.create', compact('specializations'));
     }
@@ -39,6 +42,7 @@ class StudentController extends Controller
      */
     public function store(StudentRequest $request)
     {
+        Gate::authorize('create', Student::class);
         $data = $request->validated();
         $temporaryPassword = Str::password(12);
         $userName = $this->generateUsername($data['first-name'], $data['surename']);
@@ -79,6 +83,7 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
+        Gate::authorize('view', $student);
         $student = $student->load('specialization.department', 'guardians.user', 'user.instrumentReservationsFor.instrument');
 
         return view('admin.students.show', compact('student'));
@@ -89,6 +94,7 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
+        Gate::authorize('update', $student);
         $student = $student->load('user' ,'specialization.department');
         $specializations = Specialization::latest()->get();
         return view('admin.students.edit', ['student' => $student, 'specializations' => $specializations]);
@@ -99,6 +105,7 @@ class StudentController extends Controller
      */
     public function update(StudentRequest $request, Student $student)
     {
+        Gate::authorize('update', $student);
         $data = $request->validated();
 
         $student->user->update([
@@ -127,7 +134,11 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
+        Gate::authorize('delete', $student);
+        $user = $student->user;
+
         $student->delete();
+        $user?->delete();
 
         return redirect()->route('students.index')
             ->with('success', 'Študent úspešne vymazaný');
@@ -135,6 +146,7 @@ class StudentController extends Controller
 
     public function restore($student)
     {
+        Gate::authorize('restore', $student);
         $student = Student::withTrashed()->findOrFail($student);
 
         $student->restore();
@@ -146,6 +158,30 @@ class StudentController extends Controller
         return redirect()
             ->route('students.show', $student)
             ->with('success', 'Žiak bol úspešne obnovený.');
+    }
+
+    public function forceDelete(Student $student)
+    {
+        Gate::authorize('forceDelete', $student);
+        $student = Student::withTrashed()
+            ->with(['user' => fn ($query) => $query->withTrashed()])
+            ->findOrFail($student);
+
+        if (! $student->trashed()) {
+            return redirect()
+                ->route('students.show', $student)
+                ->with('error', 'Žiaka je potrebné najskôr vymazať.');
+        }
+
+        $user = $student->user;
+
+        $student->forceDelete();
+
+        $user?->forceDelete();
+
+        return redirect()
+            ->route('students.index')
+            ->with('success', 'Žiak bol trvalo vymazaný.');
     }
 
     private function generateUsername(string $firstName, string $lastName):string {
