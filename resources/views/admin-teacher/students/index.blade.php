@@ -1,4 +1,20 @@
 <x-layout>
+    <div class="mx-6 mt-8">
+        <div class="mb-4 flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-semibold text-slate-800">Žiaci</h1>
+                <p class="text-sm text-slate-500">Prehľad všetkých evidovaných žiakov.</p>
+            </div>
+
+            @if(auth()->user()->role === \App\Enums\UserRole::Admin)
+                <a href="{{ route('students.create') }}"
+                   class="rounded-md bg-yellow-300 px-4 py-2 text-sm font-medium text-black shadow-sm hover:bg-yellow-400">
+                    + Pridať žiaka
+                </a>
+            @endif
+        </div>
+    </div>
+
     <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white shadow-sm mt-8 mx-4">
         <table class="min-w-full divide-y divide-slate-200">
             <thead class="bg-slate-300">
@@ -38,7 +54,7 @@
                         {{ $student->user->email ?? '-' }}
                     </td>
                     <td class="px-4 py-3">
-                        {{ $student->phone_number ?? '-' }}
+                        {{ $student->phone_number ? phone($student->phone_number)->formatInternational() : '-' }}
                     </td>
 
                     <td class="px-4 py-3">
@@ -58,9 +74,23 @@
                         <a href="{{ route('students.edit', $student) }}" class="text-sm text-blue-700 hover:text-blue-900">
                             Upraviť
                         </a>
-                        <a href="{{ route('students.destroy', $student) }}" class="ml-2 text-sm text-red-500 hover:text-red-700">
+                        @if(!$student->trashed())
+                        <form action="{{ route('students.destroy', $student) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                        <button class="cursor-pointer text-sm text-red-500 hover:text-red-700">
                             Vymazať
-                        </a>
+                        </button>
+                        </form>
+                        @else
+                            <form action="{{ route('students.restore', $student) }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+                                <button class="cursor-pointer text-sm text-blue-700 hover:text-blue-900">
+                                    Obnoviť
+                                </button>
+                            </form>
+                        @endif
                     </td>
                     @endif
                 </tr>

@@ -11,25 +11,32 @@
 
             {{-- Desktop menu --}}
             <div class="hidden md:flex md:items-center md:space-x-4">
-                <x-nav-link href="/" href-name="home">
-                    Domov
-                </x-nav-link>
-                @if(auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Teacher)
-                <a href="{{ route('students.index') }}" @class(['rounded-md px-3 py-2 text-sm font-medium
-                    hover:bg-yellow-300 hover:text-black', 'text-gray-300' => !request()->routeIs('students.index'),
-                    'text-black bg-yellow-300' => request()->routeIs('students.index')])>
-                    Žiaci
-                </a>
-                @endif
-
-                <a href="/teachers" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-yellow-300 hover:text-black">
-                    Učitelia
-                </a>
-
-                <a href="/events" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-yellow-300 hover:text-black">
-                    Udalosti
-                </a>
                 @auth
+                    <a href="{{ route('home') }}"
+                        @class([
+                            'rounded-md px-3 py-2 text-sm font-medium hover:bg-yellow-300 hover:text-black',
+                            'text-gray-300' => !request()->routeIs('home'),
+                            'text-black bg-yellow-300' => request()->routeIs('home'),
+                        ])>
+                        Domov
+                    </a>
+                    @if (auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Teacher)
+                        <a href="{{ route('students.index') }}"
+                            @class([
+                                'rounded-md px-3 py-2 text-sm font-medium hover:bg-yellow-300 hover:text-black',
+                                'text-gray-300' => !request()->routeIs('students.index'),
+                                'text-black bg-yellow-300' => request()->routeIs('students.index'),
+                            ])>
+                            Žiaci
+                        </a>
+                    @endif
+                    <a href="/teachers" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-yellow-300 hover:text-black">
+                        Učitelia
+                    </a>
+
+                    <a href="/events" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-yellow-300 hover:text-black">
+                        Udalosti
+                    </a>
                     <a href="{{ route('profile') }}"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="h-7 w-7">
                         <circle cx="50" cy="50" r="50" fill="#e5e7eb"/>
                         <circle cx="50" cy="36" r="18" fill="#6b7280"/>
@@ -41,9 +48,11 @@
                         <button type="submit" class="cursor-pointer rounded-md px-3 py-2 text-sm font-medium bg-orange-600 text-black hover:bg-orange-700">Odhlásiť sa</button>
                     </form>
                 @else
-                    <x-nav-link :href="route('login')" href-name="auth.*">
+                    <a href="{{ route('login') }}" @class(['rounded-md px-3 py-2 text-sm font-medium
+                    hover:bg-yellow-300 hover:text-black', 'text-gray-300' => !request()->routeIs('auth.create'),
+                    'text-black bg-yellow-300' => request()->routeIs('auth.create')])>
                         Prihlásiť sa
-                    </x-nav-link>
+                    </a>
                 @endauth
             </div>
 
@@ -88,17 +97,13 @@
     {{-- Mobile menu --}}
     <div x-show="open" x-transition x-cloak class="md:hidden">
         <div class="space-y-1 px-4 pb-4 pt-2">
-            <x-nav-link-phone href="/" href-name="home">Domov</x-nav-link-phone>
-
-            @if(auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Teacher)
-                <x-nav-link-phone href-name="students" href="students.index"/>
-            @endif
-
-            <x-nav-link-phone href="/teachers" href-name="teachers">Učitelia</x-nav-link-phone>
-
-            <x-nav-link-phone href="/events" href-name="events">Udalosti</x-nav-link-phone>
-
             @auth
+                <x-nav-link-phone :href="route('home')" href-name="home">Domov</x-nav-link-phone>
+                @if (auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Teacher)
+                <x-nav-link-phone href-name="students.index" :href="route('students.index')">Žiaci</x-nav-link-phone>
+                @endif
+                <x-nav-link-phone href="/teachers" href-name="teachers">Učitelia</x-nav-link-phone>
+                <x-nav-link-phone href="/events" href-name="events">Udalosti</x-nav-link-phone>
                 <x-nav-link-phone href="{{ route('profile') }}" href-name="profile">Profil</x-nav-link-phone>
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf

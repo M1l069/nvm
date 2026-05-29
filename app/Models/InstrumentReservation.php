@@ -23,6 +23,10 @@ class InstrumentReservation extends Model
     {
         return $this->belongsTo(User::class, 'reserved_by');
     }
+
+    public function reservedFor(): BelongsTo {
+        return $this->belongsTo(User::class, 'reserved_for');
+    }
     public function scopeConflicting($query, $start, $end, $excludeId = null)
     {
         return $query->where('start_at', '<', $end)

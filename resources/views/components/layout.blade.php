@@ -23,6 +23,9 @@
     <div role="alert" class="mt-8 rounded-md border-l-4 border-green-300 bg-green-100 p-4 text-green-700 opacity-75 sm:mx-8">
         <p class="font-bold">Úspech !</p>
         <p>{{ session('success') }}</p>
+        @if(session('temporaryPassword'))
+            <p>Dočasné heslo žiaka: {{ session('temporaryPassword') }}</p>
+        @endif
     </div>
     </div>
 @endif

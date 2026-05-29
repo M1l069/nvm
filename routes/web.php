@@ -30,5 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('students', StudentController::class)->only('index'); // toto len admin a učiteľ
     Route::resource('students', StudentController::class)
         ->only(['store', 'create', 'destroy', 'update', 'edit'])->middleware('admin');
-    Route::resource('students', StudentController::class)->only('show'); // toto všetci prihlásený
+    Route::patch('students/{student}/restore', [StudentController::class, 'restore'])->name('students.restore')
+        ->middleware('admin');
+    Route::resource('students', StudentController::class)->only('show')->withTrashed(['show']); // toto všetci prihlásený
 });

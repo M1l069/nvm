@@ -16,13 +16,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('instrument_id')->constrained()->cascadeOnDelete();
             $table->foreignId('reserved_by')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('reserved_for')->constrained('users')->cascadeOnDelete();
             $table->dateTime('from');
             $table->dateTime('to');
             $table->text('description')->nullable();
             $table->string('status')->default(InstrumentReservationStatus::Reserved);
             $table->index(['instrument_id', 'from', 'to']);
             $table->timestamps();
-            $table->index(['instrument_id', 'from', 'to']);
         });
     }
 

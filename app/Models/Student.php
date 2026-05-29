@@ -24,7 +24,7 @@ class Student extends Model
         ];
     }
 
-    public function user():BelongsTo { return $this->belongsTo(User::class); }
+    public function user():BelongsTo { return $this->belongsTo(User::class)->withTrashed(); }
     public function specialization():BelongsTo { return $this->belongsTo(Specialization::class); }
 
     public function guardians():BelongsToMany
