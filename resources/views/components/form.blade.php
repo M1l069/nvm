@@ -6,8 +6,6 @@
                 @csrf
                 @if($put)
                     @method('PUT')
-                @elseif($delete)
-                    @method('DELETE')
                 @endif
             {{ $slot }}
             <div class="mt-3 pt-2 flex justify-end">

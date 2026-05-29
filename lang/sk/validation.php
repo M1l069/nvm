@@ -24,7 +24,7 @@ return [
     ],
     'boolean'                => ':Attribute musí mať hodnotu true alebo false.',
     'can'                    => 'Pole :attribute obsahuje neoprávnenú hodnotu.',
-    'confirmed'              => 'Musíte potvrdiť :attribute.',
+    'confirmed'              => ':attribute sa musia zhodovať.',
     'contains'               => 'V poli :attribute chýba požadovaná hodnota.',
     'current_password'       => 'Heslo je nesprávne.',
     'date'                   => ':Attribute má neplatný dátum.',

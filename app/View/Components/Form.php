@@ -12,7 +12,7 @@ class Form extends Component
      * Create a new component instance.
      */
     public function __construct(public string $formName, public string $buttonText = 'Vytvoriť',
-                                public string $routeName, public ?bool $put = null, public ?bool $delete = null,
+                                public string $routeName, public ?bool $put = null,
                                 public ?string $routeParameter = null)
     {
         //

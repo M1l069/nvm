@@ -95,7 +95,6 @@
         </x-card>
 
         <x-card>
-
             <h2 class="mb-4 text-xl font-semibold text-slate-800">
                 Zákonní zástupcovia
             </h2>
@@ -135,6 +134,14 @@
                     <p class="text-slate-500">Žiak nemá priradeného zákonného zástupcu.</p>
                 @endforelse
             </div>
+            @if($student->guardians->isEmpty() || $student->guardians->count() < 2)
+                <div class="flex justify-end">
+                    <a href="{{ route('students.guardians.create', $student) }}" class="bg-yellow-300
+                        text-black py-2 px-2 rounded-md hover:bg-yellow-400">
+                        + Pridať zástupcu
+                    </a>
+                </div>
+            @endif
         </x-card>
 
         <x-card>

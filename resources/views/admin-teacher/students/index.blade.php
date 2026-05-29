@@ -43,7 +43,7 @@
                     </td>
                     <td class="px-4 py-3">
                         @forelse($student->guardians as $guardian)
-                            <a href="{{ route('students.guardian.show', ['student' => $student, 'guardian' => $guardian]) }}" class="hover:text-blue-700">
+                            <a href="{{ route('students.guardians.show', ['student' => $student, 'guardian' => $guardian]) }}" class="hover:text-blue-700">
                             {{ $guardian->user->name }}
                             </a>
                         @empty

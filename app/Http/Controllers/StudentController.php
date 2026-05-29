@@ -12,9 +12,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Http\Traits\GeneratesUsernames;
 
 class StudentController extends Controller
 {
+    use GeneratesUsernames;
     /**
      * Display a listing of the resource.
      */
@@ -67,11 +69,11 @@ class StudentController extends Controller
              'country' => $data['country']
          ]);
 
-//         if(Carbon::parse($student->birth_date)->greaterThan(now()->subYears(18))) {
-//             return redirect()->route('guardians.edit', $student)
-//                 ->with('success', 'Študent úspešne vytvorený. Prosím vytvorte konto
-//                 jeho zákonným zástupcom');
-//         }
+         if(Carbon::parse($student->birth_date)->age < 18) {
+             return redirect()->route('students.guardians.create', $student)
+                 ->with('success', 'Študent úspešne vytvorený. Prosím vytvorte konto
+                 jeho zákonným zástupcom');
+         }
 
          return redirect()->route('students.show', $student)
              ->with('success', 'Žiak úspešne vytvorený')
@@ -185,34 +187,34 @@ class StudentController extends Controller
             ->with('success', 'Žiak bol trvalo vymazaný.');
     }
 
-    private function generateUsername(string $firstName, string $lastName):string {
-        $firstName = Str::ascii(Str::lower($firstName));
-        $lastName = Str::ascii(Str::lower($lastName));
-
-        $firstName = preg_replace('/[^a-z]/', '', $firstName);
-        $lastName = preg_replace('/[^a-z]/', '', $lastName);
-
-        $baseUsername = 'x' . $lastName;
-
-        if (!User::where('username', $baseUsername)->exists()) {
-            return $baseUsername;
-        }
-
-        for ($i = 1; $i <= strlen($firstName); $i++) {
-            $username = $baseUsername . substr($firstName, 0, $i);
-
-            if (!User::where('username', $username)->exists()) {
-                return $username;
-            }
-        }
-
-        $counter = 1;
-
-        do {
-            $username = $baseUsername . $firstName . $counter;
-            $counter++;
-        } while (User::where('username', $username)->exists());
-
-        return $username;
-    }
+//    private function generateUsername(string $firstName, string $lastName):string {
+//        $firstName = Str::ascii(Str::lower($firstName));
+//        $lastName = Str::ascii(Str::lower($lastName));
+//
+//        $firstName = preg_replace('/[^a-z]/', '', $firstName);
+//        $lastName = preg_replace('/[^a-z]/', '', $lastName);
+//
+//        $baseUsername = 'x' . $lastName;
+//
+//        if (!User::where('username', $baseUsername)->exists()) {
+//            return $baseUsername;
+//        }
+//
+//        for ($i = 1; $i <= strlen($firstName); $i++) {
+//            $username = $baseUsername . substr($firstName, 0, $i);
+//
+//            if (!User::where('username', $username)->exists()) {
+//                return $username;
+//            }
+//        }
+//
+//        $counter = 1;
+//
+//        do {
+//            $username = $baseUsername . $firstName . $counter;
+//            $counter++;
+//        } while (User::where('username', $username)->exists());
+//
+//        return $username;
+//    }
 }

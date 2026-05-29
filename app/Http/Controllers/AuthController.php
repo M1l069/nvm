@@ -66,8 +66,6 @@ class AuthController extends Controller
             'password' => ['required', 'confirmed', Password::min(8)->letters()->numbers()]
         ]);
 
-        if(!$request->user()->must_change_password) {}
-
         $user = $request->user();
         $user->update([
             'password' => Hash::make($data['password']),
