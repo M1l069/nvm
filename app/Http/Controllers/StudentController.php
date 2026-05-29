@@ -162,10 +162,11 @@ class StudentController extends Controller
 
     public function forceDelete($student)
     {
-        Gate::authorize('forceDelete', $student);
         $student = Student::withTrashed()
             ->with(['user' => fn ($query) => $query->withTrashed()])
             ->findOrFail($student);
+        Gate::authorize('forceDelete', $student);
+
 
         if (! $student->trashed()) {
             return redirect()

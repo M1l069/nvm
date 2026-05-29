@@ -80,6 +80,14 @@
                                     Obnoviť
                                 </button>
                             </form>
+                            <form action="{{ route('students.forceDelete', $student) }}" method="POST"
+                                  onsubmit="return confirm('Naozaj chcete žiaka trvalo vymazať ? Táto akcia sa nedá vrátiť späť.')">
+                                @csrf
+                                @method('DELETE')
+                                <button class="cursor-pointer text-sm text-orange-500 hover:text-orange-700">
+                                    Trvalo vymazať
+                                </button>
+                            </form>
                         @endif
                     </div>
                 </div>
