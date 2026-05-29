@@ -146,8 +146,8 @@ class StudentController extends Controller
 
     public function restore($student)
     {
-        Gate::authorize('restore', $student);
         $student = Student::withTrashed()->findOrFail($student);
+        Gate::authorize('restore', $student);
 
         $student->restore();
 
@@ -160,7 +160,7 @@ class StudentController extends Controller
             ->with('success', 'Žiak bol úspešne obnovený.');
     }
 
-    public function forceDelete(Student $student)
+    public function forceDelete($student)
     {
         Gate::authorize('forceDelete', $student);
         $student = Student::withTrashed()

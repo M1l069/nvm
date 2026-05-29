@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Guardian;
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class GuardianController extends Controller
@@ -34,9 +35,11 @@ class GuardianController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Guardian $guardian)
+    public function show(Student $student, Guardian $guardian)
     {
-        return view('guardian.show', compact('guardian'));
+        $guardian->load('user');
+        $student->load('user');
+        return view('guardian.show', compact('student', 'guardian'));
     }
 
     /**

@@ -43,7 +43,7 @@
                     </td>
                     <td class="px-4 py-3">
                         @forelse($student->guardians as $guardian)
-                            <a href="#" class="hover:text-blue-700">
+                            <a href="{{ route('students.guardian.show', ['student' => $student, 'guardian' => $guardian]) }}" class="hover:text-blue-700">
                             {{ $guardian->user->name }}
                             </a>
                         @empty
@@ -83,7 +83,7 @@
                         </button>
                         </form>
                         @else
-                            <form action="{{ route('students.restore', $student) }}" method="POST">
+                            <form action="{{ route('students.restore', $student->id) }}" method="POST">
                                 @csrf
                                 @method('PATCH')
                                 <button class="cursor-pointer text-sm text-blue-700 hover:text-blue-900">
@@ -91,7 +91,7 @@
                                 </button>
                             </form>
 
-                            <form action="{{ route('students.forceDelete', $student) }}" method="POST"
+                            <form action="{{ route('students.forceDelete', $student->id) }}" method="POST"
                                   onsubmit="return confirm('Naozaj chcete žiaka trvalo vymazať ? Táto akcia sa nedá vrátiť späť.')">
                                 @csrf
                                 @method('DELETE')

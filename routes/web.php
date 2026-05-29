@@ -28,7 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::get('profile', [ProfileController::class, 'show'])->name('profile');
 
     // Cesty pre žiaka
-    Route::resource('students', StudentController::class)->only('index'); // toto len admin a učiteľ
+    Route::resource('students', StudentController::class)->only('index')->middleware('admin-teacher'); // toto len admin a učiteľ
     Route::resource('students', StudentController::class)
         ->only(['store', 'create', 'destroy', 'update', 'edit'])->middleware('admin');
     Route::patch('students/{student}/restore', [StudentController::class, 'restore'])->name('students.restore')
@@ -38,5 +38,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('students', StudentController::class)->only('show')->withTrashed(['show']); // toto všetci prihlásený
 
     // Cesty pre zákonného zástupcu
-    Route::resource('guardians', GuardianController::class)->only('show')->withTrashed(['show']);
+    Route::resource('students.guardian', GuardianController::class)->only('show')->withTrashed(['show']);
+
 });
