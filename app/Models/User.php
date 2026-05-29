@@ -47,7 +47,11 @@ class User extends Authenticatable
         return $this->hasMany(RoomReservation::class, 'reserved_by');
     }
 
-    public function instrumentReservations(): HasMany
+    public function instrumentReservations():HasMany {
+        return $this->hasMany(InstrumentReservation::class, 'reserved_for');
+    }
+
+    public function instrumentReservationsFor(): HasMany
     {
         return $this->hasMany(InstrumentReservation::class, 'reserved_by');
     }

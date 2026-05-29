@@ -12,7 +12,7 @@ class TextInput extends Component
      * Create a new component instance.
      */
     public function __construct(public string $name, public ?string $placeholder = null,
-                                public ?string $inputMode = null)
+                                public ?string $inputMode = null, public ?string $value = null)
     {
         //
     }

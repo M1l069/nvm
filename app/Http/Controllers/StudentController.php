@@ -19,7 +19,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = Student::with('specialization.department',
+        $students = Student::withTrashed()->with('specialization.department',
             'bands', 'guardians')->latest()->paginate();
 
         return view('admin-teacher.students.index', compact('students'));
@@ -70,7 +70,8 @@ class StudentController extends Controller
 //         }
 
          return redirect()->route('students.show', $student)
-             ->with('success', 'Žiak úspešne vytvorený');
+             ->with('success', 'Žiak úspešne vytvorený')
+             ->with('temporaryPassword', $temporaryPassword);
     }
 
     /**
@@ -78,6 +79,7 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
+        $student = $student->load('specialization.department', 'guardians.user', 'user.instrumentReservationsFor.instrument');
 
         return view('admin.students.show', compact('student'));
     }
@@ -85,25 +87,65 @@ class StudentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Student $student)
     {
-        //
+        $student = $student->load('user' ,'specialization.department');
+        $specializations = Specialization::latest()->get();
+        return view('admin.students.edit', ['student' => $student, 'specializations' => $specializations]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StudentRequest $request, Student $student)
     {
-        //
+        $data = $request->validated();
+
+        $student->user->update([
+            'name' => $data['first-name'] . " " . $data['surename'],
+            'email' => $data['email'],
+        ]);
+
+        $student->update([
+            'specialization_id' => $data['specialization'],
+            'birth_date' => $data['birth_date'],
+            'phone_number' => empty($data['phone_number']) ? null : phone($data['phone_number'], 'SK')->formatE164(),
+            'street' => $data['street'],
+            'city' => $data['city'],
+            'postal_code' => $data['postal_code'],
+            'country' => $data['country']
+        ]);
+
+        return redirect()->route('students.show', $student)
+            ->with('success', 'Žiak úspešne upravený !');
+
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Student $student)
     {
-        //
+        $student->delete();
+
+        return redirect()->route('students.index')
+            ->with('success', 'Študent úspešne vymazaný');
+    }
+
+    public function restore($student)
+    {
+        $student = Student::withTrashed()->findOrFail($student);
+
+        $student->restore();
+
+        if ($student->user()->withTrashed()->exists()) {
+            $student->user()->withTrashed()->first()->restore();
+        }
+
+        return redirect()
+            ->route('students.show', $student)
+            ->with('success', 'Žiak bol úspešne obnovený.');
     }
 
     private function generateUsername(string $firstName, string $lastName):string {

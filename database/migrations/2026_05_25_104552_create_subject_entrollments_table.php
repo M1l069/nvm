@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('student_id')->constrained()->cascadeOnDelete();
             $table->foreignId('subject_school_year_id')->constrained()->cascadeOnDelete();
+            $table->unsignedTinyInteger('grade_level');
             $table->date('enrolled_at');
             $table->timestamps();
             $table->unique(['student_id', 'subject_school_year_id']);

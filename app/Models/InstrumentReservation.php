@@ -10,8 +10,8 @@ class InstrumentReservation extends Model
     protected function casts(): array
     {
         return [
-            'start_at' => 'datetime',
-            'end_at' => 'datetime',
+            'from' => 'datetime',
+            'to' => 'datetime',
         ];
     }
 
@@ -22,6 +22,10 @@ class InstrumentReservation extends Model
     public function reservedBy():BelongsTo
     {
         return $this->belongsTo(User::class, 'reserved_by');
+    }
+
+    public function reservedFor(): BelongsTo {
+        return $this->belongsTo(User::class, 'reserved_for');
     }
     public function scopeConflicting($query, $start, $end, $excludeId = null)
     {

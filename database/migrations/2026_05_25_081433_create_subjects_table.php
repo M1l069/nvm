@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
+            $table->unsignedTinyInteger('grade_level');
             $table->foreignId('department_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('specialization_id')->nullable()->constrained()->nullOnDelete();
             $table->softDeletes();

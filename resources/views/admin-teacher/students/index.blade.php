@@ -1,4 +1,20 @@
 <x-layout>
+    <div class="mx-6 mt-8">
+        <div class="mb-4 flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-semibold text-slate-800">Žiaci</h1>
+                <p class="text-sm text-slate-500">Prehľad všetkých evidovaných žiakov.</p>
+            </div>
+
+            @if(auth()->user()->role === \App\Enums\UserRole::Admin)
+                <a href="{{ route('students.create') }}"
+                   class="rounded-md bg-yellow-300 px-4 py-2 text-sm font-medium text-black shadow-sm hover:bg-yellow-400">
+                    + Pridať žiaka
+                </a>
+            @endif
+        </div>
+    </div>
+
     <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white shadow-sm mt-8 mx-4">
         <table class="min-w-full divide-y divide-slate-200">
             <thead class="bg-slate-300">
@@ -10,7 +26,7 @@
                 <th class="px-4 py-3 text-left text-sm font-semibold">Odbor</th>
                 <th class="px-4 py-3 text-left text-sm font-semibold">Špecializácia</th>
                 <th class="px-4 py-3 text-left text-sm font-semibold">Dátum narodenia</th>
-                <th class="px-4 py-3 text-left text-sm font-semibold">Mesto</th>
+                <th class="px-4 py-3 text-left text-sm font-semibold">Bydlisko</th>
                 @if(auth()->user()->role === \App\Enums\UserRole::Admin)
                     <th class="px-4 py-3 text-right text-sm font-semibold">Akcie</th>
                 @endif
@@ -27,7 +43,9 @@
                     </td>
                     <td class="px-4 py-3">
                         @forelse($student->guardians as $guardian)
+                            <a href="#" class="hover:text-blue-700">
                             {{ $guardian->user->name }}
+                            </a>
                         @empty
                             -
                         @endforelse
@@ -36,7 +54,7 @@
                         {{ $student->user->email ?? '-' }}
                     </td>
                     <td class="px-4 py-3">
-                        {{ $student->phone_number ?? '-' }}
+                        {{ $student->phone_number ? phone($student->phone_number)->formatInternational() : '-' }}
                     </td>
 
                     <td class="px-4 py-3">
@@ -49,16 +67,30 @@
                         {{ $student->birth_date->format('d. m. Y') }}
                     </td>
                     <td class="px-4 py-3">
-                        {{ $student->city }}
+                        {{ $student->street }}, {{ $student->postal_code }}  {{ $student->city }}, {{ $student->country }}
                     </td>
                     @if(auth()->user()->role === \App\Enums\UserRole::Admin)
                     <td class="px-4 py-3 text-right">
                         <a href="{{ route('students.edit', $student) }}" class="text-sm text-blue-700 hover:text-blue-900">
                             Upraviť
                         </a>
-                        <a href="{{ route('students.destroy', $student) }}" class="ml-2 text-sm text-red-500 hover:text-red-700">
+                        @if(!$student->trashed())
+                        <form action="{{ route('students.destroy', $student) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                        <button class="cursor-pointer text-sm text-red-500 hover:text-red-700">
                             Vymazať
-                        </a>
+                        </button>
+                        </form>
+                        @else
+                            <form action="{{ route('students.restore', $student) }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+                                <button class="cursor-pointer text-sm text-blue-700 hover:text-blue-900">
+                                    Obnoviť
+                                </button>
+                            </form>
+                        @endif
                     </td>
                     @endif
                 </tr>

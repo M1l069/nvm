@@ -5,17 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-//use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class GradeEvent extends Model
 {
-//    use SoftDeletes;
-    protected function casts(): array
-    {
-        return [
-            'date' => 'date',
-        ];
-    }
+    use SoftDeletes;
 
     public function subjectSchoolYear():BelongsTo
     {
