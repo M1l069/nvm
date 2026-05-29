@@ -71,10 +71,10 @@
                     </td>
                     @if(auth()->user()->role === \App\Enums\UserRole::Admin)
                     <td class="px-4 py-3 text-right">
-                        <a href="{{ route('students.edit', $student) }}" class="text-sm text-blue-700 hover:text-blue-900">
-                            Upraviť
-                        </a>
                         @if(!$student->trashed())
+                            <a href="{{ route('students.edit', $student) }}" class="text-sm text-blue-700 hover:text-blue-900">
+                                Upraviť
+                            </a>
                         <form action="{{ route('students.destroy', $student) }}" method="POST">
                             @csrf
                             @method('DELETE')

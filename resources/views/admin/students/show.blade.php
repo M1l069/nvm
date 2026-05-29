@@ -51,27 +51,32 @@
                 </div>
             </div>
             @if(auth()->user()->role === \App\Enums\UserRole::Admin)
+                @if(!$student->trashed())
                 <div>
                     <div class="flex justify-end">
-                        <a href="{{ route('students.edit', $student) }}" class="bg-yellow-300 text-black py-2 px-2 rounded-md hover:bg-yellow-400">Upraviť</a>
+                        <a href="{{ route('students.edit', $student) }}" class="bg-yellow-300
+                        text-black py-2 px-2 rounded-md hover:bg-yellow-400">Upraviť</a>
                     </div>
                 </div>
+                @endif
 
                 <div>
                     <div class="flex justify-end">
                         @if(!$student->trashed())
-                        <form action="{{ route('students.destroy', $student) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button class="bg-orange-500 mt-4 text-black py-2 px-2 rounded-md shadow-md hover:bg-orange-600 cursor-pointer">
-                                Vymazať
-                            </button>
-                        </form>
+                            <form action="{{ route('students.destroy', $student) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button
+                                    class="bg-orange-500 mt-4 text-black py-2 px-2 rounded-md shadow-md hover:bg-orange-600 cursor-pointer">
+                                    Vymazať
+                                </button>
+                            </form>
                         @else
                             <form action="{{ route('students.restore', $student) }}" method="POST">
                                 @csrf
                                 @method('PATCH')
-                                <button class="bg-blue-300 mt-4 text-black py-2 px-2 rounded-md shadow-md hover:bg-blue-400 cursor-pointer">
+                                <button
+                                    class="bg-blue-300 mt-4 text-black py-2 px-2 rounded-md shadow-md hover:bg-blue-400 cursor-pointer">
                                     Obnoviť
                                 </button>
                             </form>
@@ -139,9 +144,9 @@
                     </div>
                 @empty
                     <p class="text-slate-500">Žiak nemá žiadne rezervácie nástrojov.</p>
-                <div class="flex justify-end">
-                    <a href="#" class="bg-yellow-300 text-black py-2 px-2 rounded-md">Upraviť</a>
-                </div>
+                    <div class="flex justify-end">
+                        <a href="#" class="bg-yellow-300 text-black py-2 px-2 rounded-md">Upraviť</a>
+                    </div>
                 @endforelse
             </div>
         </x-card>

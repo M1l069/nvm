@@ -69,6 +69,7 @@ class StudentPolicy
      */
     public function update(User $user, Student $student): bool
     {
+
         if($user->role === UserRole::Admin) {
             return true;
         }
