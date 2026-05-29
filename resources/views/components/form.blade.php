@@ -4,6 +4,11 @@
             <h1 class="mb-8 text-center text-3xl font-semibold sm:text-4xl">{{ $formName }}</h1>
             <form action="{{ route($routeName) }}" class="space-y-5" method="POST">
                 @csrf
+                @if($put)
+                    @method('PUT')
+                @elseif($delete)
+                    @method('DELETE')
+                @endif
             {{ $slot }}
             <div class="mt-3 pt-2 flex justify-end">
                 <button

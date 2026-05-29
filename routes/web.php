@@ -29,6 +29,6 @@ Route::middleware('auth')->group(function () {
     // Cesty pre žiaka
     Route::resource('students', StudentController::class)->only('index'); // toto len admin a učiteľ
     Route::resource('students', StudentController::class)
-        ->only(['store', 'create', 'destroy', 'update', 'edit'])->middleware('admin-student'); //na toto pôjde middleware, že to môže robiť len admin
-    Route::resource('students', StudentController::class)->only('show'); // toto všetci});
+        ->only(['store', 'create', 'destroy', 'update', 'edit'])->middleware('admin');
+    Route::resource('students', StudentController::class)->only('show'); // toto všetci prihlásený
 });

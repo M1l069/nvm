@@ -19,7 +19,10 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //
+        $students = Student::with('specialization.department',
+            'bands', 'guardians')->latest()->paginate();
+
+        return view('admin-teacher.students.index', compact('students'));
     }
 
     /**
@@ -73,9 +76,10 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Student $student)
     {
-        //
+
+        return view('admin.students.show', compact('student'));
     }
 
     /**

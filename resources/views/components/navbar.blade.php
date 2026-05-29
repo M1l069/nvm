@@ -14,10 +14,13 @@
                 <x-nav-link href="/" href-name="home">
                     Domov
                 </x-nav-link>
-
-                <a href="/students" class="rounded-md px-3 py-2 text-sm font-medium  text-gray-300 hover:bg-yellow-300 hover:text-black">
+                @if(auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Teacher)
+                <a href="{{ route('students.index') }}" @class(['rounded-md px-3 py-2 text-sm font-medium
+                    hover:bg-yellow-300 hover:text-black', 'text-gray-300' => !request()->routeIs('students.index'),
+                    'text-black bg-yellow-300' => request()->routeIs('students.index')])>
                     Žiaci
                 </a>
+                @endif
 
                 <a href="/teachers" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-yellow-300 hover:text-black">
                     Učitelia
@@ -87,7 +90,9 @@
         <div class="space-y-1 px-4 pb-4 pt-2">
             <x-nav-link-phone href="/" href-name="home">Domov</x-nav-link-phone>
 
-            <x-nav-link-phone href="/students" href-name="students">Študenti</x-nav-link-phone>
+            @if(auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Teacher)
+                <x-nav-link-phone href-name="students" href="students.index"/>
+            @endif
 
             <x-nav-link-phone href="/teachers" href-name="teachers">Učitelia</x-nav-link-phone>
 

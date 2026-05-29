@@ -12,7 +12,7 @@ class AuthController extends Controller
 {
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for logging in.
      */
     public function create()
     {
@@ -20,7 +20,8 @@ class AuthController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Log in user, and if must_change_password is true (user is newly created, and he is logging in for the first time)
+     * he will be redirected to form for changing the password.
      */
     public function store(Request $request)
     {
@@ -57,13 +58,15 @@ class AuthController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update user's password.
      */
     public function updatePassword(Request $request)
     {
         $data = $request->validate([
             'password' => ['required', 'confirmed', Password::min(8)->letters()->numbers()]
         ]);
+
+        if(!$request->user()->must_change_password) {}
 
         $user = $request->user();
         $user->update([
@@ -81,7 +84,6 @@ class AuthController extends Controller
     public function destroy()
     {
         Auth::logout();
-
         request()->session()->invalidate();
         request()->session()->regenerateToken();
         return redirect('/');

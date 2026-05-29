@@ -17,7 +17,8 @@ class AdminStudents
     public function handle(Request $request, Closure $next): Response
     {
         if(!request()->user() || request()->user()->role !== UserRole::Admin) {
-            abort(403, 'Túto akciu môže vykonať iba administrátor.');
+            return redirect()->back(fallback: route('home'))
+                ->with('error', 'Túto akciu môže vykonať iba administrátor !');
         }
         return $next($request);
     }
