@@ -39,7 +39,7 @@
                             </a>
                         </td>
                         <td class="px-4 py-3">
-                            <a href="mailto:{{ $teacher->user->email }}">{{ $teacher->user->email }}</a>
+                            <a href="mailto:{{ $teacher->user->email }}" class="hover:text-blue-800">{{ $teacher->user->email }}</a>
                         </td>
                         <td class="px-4 py-3">
                             {{ $teacher->specialization->department->name }}

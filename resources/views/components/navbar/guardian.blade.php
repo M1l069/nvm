@@ -1,36 +1,38 @@
-<a href="{{ route('teachers.index') }}" @class([
+<a href="{{ route('events.index') }}" @class([
                                 'rounded-md px-3 py-2 text-sm font-medium hover:bg-yellow-300 hover:text-black',
-                                'text-gray-300' => !request()->routeIs('teachers.index'),
-                                'text-black bg-yellow-300' => request()->routeIs('teachers.index'),
+                                'text-gray-300' => !request()->routeIs('#'),
+                                'text-black bg-yellow-300' => request()->routeIs('#'),
                             ])>
     Udalosti
 </a>
 
-<a href="{{ route('teachers.index') }}" @class([
+<a href="#" @class([
                                 'rounded-md px-3 py-2 text-sm font-medium hover:bg-yellow-300 hover:text-black',
-                                'text-gray-300' => !request()->routeIs('teachers.index'),
-                                'text-black bg-yellow-300' => request()->routeIs('teachers.index'),
+                                'text-gray-300' => !request()->routeIs('#'),
+                                'text-black bg-yellow-300' => request()->routeIs('#'),
                             ])>
-    Predmety
+    Známky žiaka
 </a>
-<a href="{{ route('teachers.index') }}" @class([
+<a href="#" @class([
                                 'rounded-md px-3 py-2 text-sm font-medium hover:bg-yellow-300 hover:text-black',
-                                'text-gray-300' => !request()->routeIs('teachers.index'),
-                                'text-black bg-yellow-300' => request()->routeIs('teachers.index'),
+                                'text-gray-300' => !request()->routeIs('#'),
+                                'text-black bg-yellow-300' => request()->routeIs('#'),
                             ])>
-    Rezervacie miestností
+    Rezervácie nástrojov pre žiaka
 </a>
-<a href="{{ route('teachers.index') }}" @class([
+<a href="#" @class([
                                 'rounded-md px-3 py-2 text-sm font-medium hover:bg-yellow-300 hover:text-black',
-                                'text-gray-300' => !request()->routeIs('teachers.index'),
-                                'text-black bg-yellow-300' => request()->routeIs('teachers.index'),
+                                'text-gray-300' => !request()->routeIs('#'),
+                                'text-black bg-yellow-300' => request()->routeIs('#'),
                             ])>
-    Rezervácie nástrojov
+    Rozvrh žiaka
 </a>
-<a href="{{ route('teachers.index') }}" @class([
+<a href="#" @class([
                                 'rounded-md px-3 py-2 text-sm font-medium hover:bg-yellow-300 hover:text-black',
-                                'text-gray-300' => !request()->routeIs('teachers.index'),
-                                'text-black bg-yellow-300' => request()->routeIs('teachers.index'),
+                                'text-gray-300' => !request()->routeIs('#'),
+                                'text-black bg-yellow-300' => request()->routeIs('#'),
                             ])>
-    Kapely
+    Kapely žiaka
 </a>
+
+

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\GuardianController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\ProfileController;
@@ -60,5 +61,10 @@ Route::middleware('auth')->group(function () {
     // Cesty pre rezervácie nástrojov
 
     // Cesty pre udalosti
-
+    Route::resource('events', EventController::class)->only(['index', 'show']);
+    Route::resource('events', EventController::class)->only(['store', 'create', 'destroy', 'update', 'edit'])
+        ->middleware('admin-teacher');
+    Route::patch('events/{event}/restore', [EventController::class, 'restore'])->name('events.restore')
+        ->middleware('admin');
+    Route::resource('events', EventController::class)->only('show')->withTrashed(['show']);
 });

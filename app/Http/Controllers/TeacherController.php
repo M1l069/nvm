@@ -78,8 +78,7 @@ class TeacherController extends Controller
     public function show(Teacher $teacher)
     {
         Gate::authorize('view', $teacher);
-        $teacher->load('user', 'specialization.department', 'bands.students', 'user.instrumentReservations',
-        'user.roomReservations.room', 'user.roomReservations.reservedBy');
+        $teacher->load('user', 'specialization.department', 'bands.students');
         return view('teachers.show', compact('teacher'));
     }
 

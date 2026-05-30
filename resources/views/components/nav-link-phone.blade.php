@@ -1,4 +1,4 @@
-<a href="{{ $href }}" @class(['block rounded-md px-3 py-2 text-base font-medium hover:bg-gray-700',
+<a href="{{ $href }}" @class(['block rounded-md px-3 py-2 text-base font-medium hover:bg-yellow-300',
 'text-black' => request()->routeIs($hrefName),
  'text-gray-300' => !request()->routeIs($hrefName)])>
     {{ $slot }}

@@ -89,8 +89,7 @@ class StudentController extends Controller
         $student = $student->load(['specialization.department',
             'guardians' => fn ($query) => $query->withTrashed(),
             'guardians.user' => fn ($query) => $query->withTrashed(),
-            'bands',
-            'user.instrumentReservationsFor.instrument']);
+            'bands']);
 
         return view('admin.students.show', compact('student'));
     }

@@ -10,7 +10,7 @@
             </div>
 
             {{-- Desktop menu --}}
-            <div class="hidden md:flex md:items-center md:space-x-4">
+            <div class="hidden xl:flex xl:items-center xl:space-x-4">
                 @auth
                     <a href="{{ route('home') }}"
                         @class([
@@ -76,11 +76,11 @@
             </div>
 
             {{-- Hamburger button --}}
-            <div class="md:hidden">
+            <div class="xl:hidden">
                 <button
                     type="button"
                     @click="open = !open"
-                    class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                    class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-white"
                 >
                     <span class="sr-only">Otvoriť menu</span>
 
@@ -114,8 +114,8 @@
     </div>
 
     {{-- Mobile menu --}}
-    <div x-show="open" x-transition x-cloak class="md:hidden">
-        <div class="space-y-1 px-4 pb-4 pt-2">
+    <div x-show="open" x-transition x-cloak class="xl:hidden">
+        <div class="flex flex-col items-end space-y-1 px-4 pb-4 pt-2 text-right">
             @auth
                 <x-nav-link-phone :href="route('home')" href-name="home">Domov</x-nav-link-phone>
                 @if (auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Teacher)
