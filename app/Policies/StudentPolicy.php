@@ -18,7 +18,6 @@ class StudentPolicy
             return true;
         }
         return false;
-            ;
     }
 
     /**
@@ -30,7 +29,7 @@ class StudentPolicy
             return $user->role === UserRole::Admin;
         }
 
-        if($user->role === UserRole::Admin) {
+        if($user->role === UserRole::Admin || $user->role === UserRole::Teacher) {
             return true;
         }
 
@@ -40,14 +39,6 @@ class StudentPolicy
 
         if($user->role === UserRole::Parent) {
             return $student->guardians()->where('guardians.user_id', $user->id)->exists();
-        }
-
-        if($user->role === UserRole::Teacher) {
-            return $student->enrollments()
-                ->whereHas('subjectSchoolYear', function ($query) use ($user) {
-                    $query->where('teacher_id', $user->teacher->id);
-                })
-                ->exists();
         }
 
         return false;

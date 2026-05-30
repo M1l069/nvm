@@ -30,13 +30,32 @@
                             Žiaci
                         </a>
                     @endif
-                    <a href="{{ route('teachers.index') }}" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-yellow-300 hover:text-black">
+                    <a href="{{ route('teachers.index') }}"  @class([
+                                'rounded-md px-3 py-2 text-sm font-medium hover:bg-yellow-300 hover:text-black',
+                                'text-gray-300' => !request()->routeIs('teachers.index'),
+                                'text-black bg-yellow-300' => request()->routeIs('teachers.index'),
+                            ])>
                         Učitelia
                     </a>
 
-                    <a href="/events" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-yellow-300 hover:text-black">
-                        Udalosti
-                    </a>
+                    @switch(auth()->user()->role)
+                        @case(\App\Enums\UserRole::Admin)
+                            <x-navbar.admin/>
+                            @break
+
+                        @case(\App\Enums\UserRole::Teacher)
+                            <x-navbar.teacher/>
+                            @break
+
+                        @case(\App\Enums\UserRole::Student)
+                            <x-navbar.student/>
+                            @break
+
+                        @case(\App\Enums\UserRole::Parent)
+                            <x-navbar.guardian/>
+                            @break
+                    @endswitch
+
                     <a href="{{ route('profile') }}"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="h-7 w-7">
                         <circle cx="50" cy="50" r="50" fill="#e5e7eb"/>
                         <circle cx="50" cy="36" r="18" fill="#6b7280"/>
@@ -103,7 +122,24 @@
                 <x-nav-link-phone href-name="students.index" :href="route('students.index')">Žiaci</x-nav-link-phone>
                 @endif
                 <x-nav-link-phone href="{{ route('teachers.index') }}" href-name="teachers">Učitelia</x-nav-link-phone>
-                <x-nav-link-phone href="/events" href-name="events">Udalosti</x-nav-link-phone>
+                @switch(auth()->user()->role)
+                    @case(\App\Enums\UserRole::Admin)
+                        <x-navbar.admin-mobile/>
+                        @break
+
+                    @case(\App\Enums\UserRole::Teacher)
+                        <x-navbar.teacher-mobile/>
+                        @break
+
+                    @case(\App\Enums\UserRole::Student)
+                        <x-navbar.student-mobile/>
+                        @break
+
+                    @case(\App\Enums\UserRole::Parent)
+                        <x-navbar.guardian-mobile/>
+                        @break
+                @endswitch
+
                 <x-nav-link-phone href="{{ route('profile') }}" href-name="profile">Profil</x-nav-link-phone>
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf

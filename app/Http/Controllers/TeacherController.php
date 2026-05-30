@@ -8,6 +8,7 @@ use App\Models\Specialization;
 use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Http\Traits\GeneratesUsernames;
@@ -20,6 +21,7 @@ class TeacherController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', Teacher::class);
         $teachers = Teacher::withTrashed()
             ->with([
                 'user' => fn ($query) => $query->withTrashed(),
@@ -35,6 +37,7 @@ class TeacherController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', Teacher::class);
         $specializations = Specialization::latest()->get();
         return view('teachers.create', compact('specializations'));
     }
@@ -44,6 +47,7 @@ class TeacherController extends Controller
      */
     public function store(TeacherRequest $request)
     {
+        Gate::authorize('create', Teacher::class);
         $data = $request->validated();
         $temporaryPassword = Str::password(12);
         $userName = $this->generateUsername($data['first-name'], $data['surename']);
@@ -73,6 +77,7 @@ class TeacherController extends Controller
      */
     public function show(Teacher $teacher)
     {
+        Gate::authorize('view', $teacher);
         $teacher->load('user', 'specialization.department', 'bands.students', 'user.instrumentReservations',
         'user.roomReservations.room', 'user.roomReservations.reservedBy');
         return view('teachers.show', compact('teacher'));
@@ -83,6 +88,7 @@ class TeacherController extends Controller
      */
     public function edit(Teacher $teacher)
     {
+        Gate::authorize('update', $teacher);
         $specializations = Specialization::latest()->get();
         return view('teachers.edit', compact('teacher', 'specializations'));
     }
@@ -92,6 +98,7 @@ class TeacherController extends Controller
      */
     public function update(TeacherRequest $request, Teacher $teacher)
     {
+        Gate::authorize('update', $teacher);
         $data = $request->validated();
         $teacher->user->update([
             'name' => $data['first-name'] . " " . $data['surename'],
@@ -111,6 +118,7 @@ class TeacherController extends Controller
      */
     public function destroy(Teacher $teacher)
     {
+        Gate::authorize('delete', $teacher);
         $user = $teacher->user;
         $teacher->delete();
         $user?->delete();
@@ -120,7 +128,7 @@ class TeacherController extends Controller
 
     public function restore($teacher) {
         $teacher = Teacher::withTrashed()->findOrFail($teacher);
-        // gate
+        Gate::authorize('restore', $teacher);
         $teacher->restore();
 
         if($teacher->user()->withTrashed()->exists()) {

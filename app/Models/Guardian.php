@@ -12,7 +12,7 @@ class Guardian extends Model
 {
     use SoftDeletes;
 
-    public function user():BelongsTo { return $this->belongsTo(User::class); }
+    public function user():BelongsTo { return $this->belongsTo(User::class)->withTrashed(); }
 
     public function students():BelongsToMany {
         return $this->belongsToMany(Student::class, 'guardian_student');

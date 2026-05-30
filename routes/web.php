@@ -55,8 +55,9 @@ Route::middleware('auth')->group(function () {
 
     // Cesty pre predmety
 
-    // Cesty pre rezervácie
+    // Cesty pre rezervácie miestností
 
+    // Cesty pre rezervácie nástrojov
 
     // Cesty pre udalosti
 

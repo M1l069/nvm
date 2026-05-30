@@ -3,47 +3,35 @@
 namespace App\Policies;
 
 use App\Enums\UserRole;
-use App\Models\Guardian;
-use App\Models\Student;
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class GuardianPolicy
+class TeacherPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Student $student, Guardian $guardian): bool
+    public function view(User $user, Teacher $teacher): bool
     {
-        if($guardian->trashed()) {
+        if($teacher->trashed()) {
             return $user->role === UserRole::Admin;
         }
 
-        if($user->role === UserRole::Admin || $user->role === UserRole::Teacher) {
-            return true;
-        }
-
-        if (!$student->guardians()->whereKey($guardian->id)->exists()) {
-            return false;
-        }
-
-        if($user->role === UserRole::Student) {
-            return $user->id === $student->id;
-        }
-
-        if($user->role === UserRole::Parent) {
-            return $user->id === $guardian->user_id;
-        }
-
-        return false;
+        return in_array($user->role, [
+            UserRole::Admin,
+            UserRole::Teacher,
+            UserRole::Student,
+            UserRole::Parent
+        ]);
     }
 
     /**
@@ -57,7 +45,7 @@ class GuardianPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Guardian $guardian): bool
+    public function update(User $user, Teacher $teacher): bool
     {
         return $user->role === UserRole::Admin;
     }
@@ -65,7 +53,7 @@ class GuardianPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Guardian $guardian): bool
+    public function delete(User $user, Teacher $teacher): bool
     {
         return $user->role === UserRole::Admin;
     }
@@ -73,7 +61,7 @@ class GuardianPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Guardian $guardian): bool
+    public function restore(User $user, Teacher $teacher): bool
     {
         return $user->role === UserRole::Admin;
     }
@@ -81,7 +69,7 @@ class GuardianPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Guardian $guardian): bool
+    public function forceDelete(User $user, Teacher $teacher): bool
     {
         return false;
     }
