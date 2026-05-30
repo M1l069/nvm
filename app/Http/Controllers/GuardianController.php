@@ -70,6 +70,7 @@ class GuardianController extends Controller
      */
     public function show(Student $student, Guardian $guardian)
     {
+        Gate::authorize('view', [$student, $guardian]);
         $guardian->load('user');
         $student->load('user');
         return view('guardian.show', compact('student', 'guardian'));
@@ -109,9 +110,26 @@ class GuardianController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Student $student, Guardian $guardian)
     {
-        //
+        Gate::authorize('delete', $guardian);
+        $user = $guardian->user;
+        $guardian->delete();
+        $user?->delete();
+        return redirect()->route('students.index')
+            ->with('success', 'Zákonný zástupca úspešne vymazaný');
+    }
+
+    public function restore($student, $guardian) {
+        $guardian = Guardian::withTrashed()->findOrFail($guardian);
+        Gate::authorize('restore', $guardian);
+        $guardian->restore();
+        if ($guardian->user()->withTrashed()->exists()) {
+            $guardian->user()->withTrashed()->first()->restore();
+        }
+
+        return redirect()->route('students.guardians.show', ['student' => $student, 'guardian' => $guardian])
+            ->with('success', 'Zákonný zástupca úspešne obnovený.');
     }
 
 }

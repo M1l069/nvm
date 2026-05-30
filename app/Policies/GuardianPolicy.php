@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Enums\UserRole;
 use App\Models\Guardian;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
@@ -20,8 +21,24 @@ class GuardianPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Guardian $guardian): bool
+    public function view(User $user, Student $student, Guardian $guardian): bool
     {
+        if($user->role === UserRole::Admin || $user->role === UserRole::Teacher) {
+            return true;
+        }
+
+        if (!$student->guardians()->whereKey($guardian->id)->exists()) {
+            return false;
+        }
+
+        if($user->role === UserRole::Student) {
+            return $user->id === $student->id;
+        }
+
+        if($user->role === UserRole::Parent) {
+            return $user->id === $guardian->user_id;
+        }
+
         return false;
     }
 

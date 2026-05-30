@@ -7,8 +7,8 @@ sm:gap-y-3 sm:text-left' => $user->role != \App\Enums\UserRole::Student,
     <div class="text-slate-500 font-medium">Používateľské meno: </div>
     <div class="text-slate-500">{{ $user->username }}</div>
     @if($user->email)
-        <div class="text-slate-500 font-medium">E-mail: </div>
-        <div class="text-slate-500">{{ $user->email }}</div>
+        <p class="text-slate-500 font-medium">E-mail: </p>
+        <a href="mailto:{{ $user->email }}" class="text-slate-500 hover:text-blue-800">{{ $user->email }}</a>
     @endif
     @if($user->role === \App\Enums\UserRole::Student)
         <x-profile.student-info :student="$user"/>

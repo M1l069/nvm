@@ -20,7 +20,7 @@
             <thead class="bg-slate-300">
             <tr>
                 <th class="px-4 py-3 text-left text-sm font-semibold">Meno žiaka</th>
-                <th class="px-4 py-3 text-left text-sm font-semibold">Meno rodiča</th>
+                <th class="px-4 py-3 text-left text-sm font-semibold">Mená zástupcov</th>
                 <th class="px-4 py-3 text-left text-sm font-semibold">Email žiaka</th>
                 <th class="px-4 py-3 text-left text-sm font-semibold">Tel.č. žiaka</th>
                 <th class="px-4 py-3 text-left text-sm font-semibold">Odbor</th>
@@ -44,17 +44,25 @@
                     <td class="px-4 py-3">
                         @forelse($student->guardians as $guardian)
                             <a href="{{ route('students.guardians.show', ['student' => $student, 'guardian' => $guardian]) }}" class="hover:text-blue-700">
-                            {{ $guardian->user->name }}
+                            {{ $guardian->user->name }}@if(!$loop->last), @endif
                             </a>
                         @empty
                             -
                         @endforelse
                     </td>
                     <td class="px-4 py-3 text-slate-600">
-                        {{ $student->user->email ?? '-' }}
+                        @if($student->user->email)
+                            <a href="mailto:{{ $student->user->email }}" class="hover:text-blue-700">{{ $student->user->email }}</a>
+                        @else
+                            -
+                        @endif
                     </td>
                     <td class="px-4 py-3">
-                        {{ $student->phone_number ? phone($student->phone_number)->formatInternational() : '-' }}
+                        @if($student->user->phone_number)
+                            <a href="tel:{{ phone($student->phone_number)->formatInternational() }}">{{ phone($student->phone_number)->formatInternational() }}</a>
+                        @else
+                            -
+                        @endif
                     </td>
 
                     <td class="px-4 py-3">

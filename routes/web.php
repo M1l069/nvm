@@ -40,4 +40,15 @@ Route::middleware('auth')->group(function () {
     // Cesty pre zákonného zástupcu
     Route::resource('students.guardians', GuardianController::class)->only(['store', 'create', 'destroy', 'update', 'edit'])->middleware('admin');
     Route::resource('students.guardians', GuardianController::class)->only('show')->withTrashed(['show']);
+    Route::patch('students/{student}/guardians/{guardian}/restore', [GuardianController::class, 'restore'])->name('students.guardians.restore')
+        ->middleware('admin');
+
+    // Cesty pre predmety
+
+    // Cesty pre rezervácie
+
+    // cesty pre učiteľov
+
+    // Cesty pre udalosti
+
 });

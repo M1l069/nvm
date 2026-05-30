@@ -39,7 +39,7 @@ class StudentPolicy
         }
 
         if($user->role === UserRole::Parent) {
-            return $student->guardians()->where('guardian.user_id', $user->id)->exists();
+            return $student->guardians()->where('guardians.user_id', $user->id)->exists();
         }
 
         if($user->role === UserRole::Teacher) {

@@ -86,7 +86,10 @@ class StudentController extends Controller
     public function show(Student $student)
     {
         Gate::authorize('view', $student);
-        $student = $student->load('specialization.department', 'guardians.user', 'user.instrumentReservationsFor.instrument');
+        $student = $student->load(['specialization.department',
+            'guardians' => fn ($query) => $query->withTrashed(),
+            'guardians.user' => fn ($query) => $query->withTrashed(),
+            'user.instrumentReservationsFor.instrument']);
 
         return view('admin.students.show', compact('student'));
     }

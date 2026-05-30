@@ -100,10 +100,17 @@
             </h2>
             <div class="grid gap-4 sm:grid-cols-2">
                 @forelse($student->guardians as $guardian)
+
+                    @if($loop->last)
+                        <hr class="col-span-2 border-slate-300">
+                    @endif
                     <div>
                         <p class="text-sm font-medium text-slate-500">Meno</p>
                         <p class="text-slate-800">
                             {{ $guardian->user->name }}
+                            @if($guardian->trashed())
+                                <span class="text-red-500 ml-4">Vymazaný</span>
+                            @endif
                         </p>
                     </div>
                     <div>
@@ -129,18 +136,29 @@
                             {{ phone($guardian->phone_number) }}
                         </p>
                     </div>
+                    @if($guardian->trashed() && auth()->user()->role === \App\Enums\UserRole::Admin)
+                        <div class="col-span-2 flex justify-end">
+                            <form action="{{ route('students.guardians.restore', ['student' => $student->id, 'guardian' => $guardian->id]) }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+                                <button class="py-2 px-2 bg-blue-300 cursor-pointer hover:bg-blue-400 rounded-md shadow-md border-slate-100">Obnoviť</button>
+                            </form>
+                        </div>
+                    @endif
 
                 @empty
                     <p class="text-slate-500">Žiak nemá priradeného zákonného zástupcu.</p>
                 @endforelse
             </div>
-            @if($student->guardians->isEmpty() || $student->guardians->count() < 2)
-                <div class="flex justify-end">
-                    <a href="{{ route('students.guardians.create', $student) }}" class="bg-yellow-300
-                        text-black py-2 px-2 rounded-md hover:bg-yellow-400">
-                        + Pridať zástupcu
-                    </a>
-                </div>
+            @if(auth()->user()->role === \App\Enums\UserRole::Admin)
+                @if($student->guardians->isEmpty() || $student->guardians->count() < 2)
+                    <div class="flex justify-end">
+                        <a href="{{ route('students.guardians.create', $student) }}" class="bg-yellow-300
+                            text-black py-2 px-2 rounded-md hover:bg-yellow-400">
+                            + Pridať zástupcu
+                        </a>
+                    </div>
+                @endif
             @endif
         </x-card>
 
@@ -155,14 +173,14 @@
                         <p class="font-medium text-slate-800">
                             {{ $reservation->instrument->name ?? 'Neznámy nástroj' }}
                         </p>
-                        <a href="#" class="bg-yellow-300 text-nlack">Upraviť</a>
+                        @if(auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->id === $reservation->reservedBy()->user->id)
+                            <a href="#" class="bg-yellow-300 text-black py-2 px-2 rounded-md">Upraviť</a>
+                        @endif
                     </div>
                 @empty
                     <p class="text-slate-500">Žiak nemá žiadne rezervácie nástrojov.</p>
-                    <div class="flex justify-end">
-                        <a href="#" class="bg-yellow-300 text-black py-2 px-2 rounded-md">Upraviť</a>
-                    </div>
                 @endforelse
+
             </div>
         </x-card>
 
