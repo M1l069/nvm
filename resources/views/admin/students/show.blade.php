@@ -14,7 +14,11 @@
 
                 <div>
                     <p class="text-sm font-medium text-slate-500">Email:</p>
-                    <p class="text-slate-800">{{ $student->user->email ?? '-' }}</p>
+                    @if($student->user->email)
+                        <a href="mailto:{{ $student->user->email }}" class="text-slate-800 hover:text-blue-800">{{ $student->user->email }}</a>
+                    @else
+                        -
+                    @endif
                 </div>
 
                 <div>
@@ -29,7 +33,12 @@
 
                 <div>
                     <p class="text-sm font-medium text-slate-500">Tel. č. :</p>
-                    <p class="text-slate-800">{{ $student->phone_number ?? '-' }}</p>
+                    @if($student->phone_number)
+                        <a href="tel:{{ phone($student->phone_number)->formatInternational() }}" class="text-slate-800
+                        hover:text-blue-800">{{ $student->phone_number }}</a>
+                    @else
+                        -
+                    @endif
                 </div>
 
                 <div class="sm:col-span-2">

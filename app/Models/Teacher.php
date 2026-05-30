@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-#[Fillable(['user_id', 'phone_number'])]
+#[Fillable(['user_id', 'specialization_id'])]
 class Teacher extends Model
 {
     use SoftDeletes;
 
-    public function user():BelongsTo { return $this->belongsTo(User::class); }
+    public function user():BelongsTo { return $this->belongsTo(User::class)->withTrashed(); }
     public function specialization():BelongsTo { return $this->belongsTo(Specialization::class); }
     public function subjectSchoolYears():HasMany
     {

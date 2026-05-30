@@ -5,6 +5,7 @@ use App\Http\Controllers\GuardianController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
 
 // Cesty pre každého používateľa s prihlásením
@@ -38,16 +39,24 @@ Route::middleware('auth')->group(function () {
     Route::resource('students', StudentController::class)->only('show')->withTrashed(['show']); // toto všetci prihlásený
 
     // Cesty pre zákonného zástupcu
-    Route::resource('students.guardians', GuardianController::class)->only(['store', 'create', 'destroy', 'update', 'edit'])->middleware('admin');
+    Route::resource('students.guardians', GuardianController::class)->only(['store', 'create', 'destroy', 'update', 'edit'])
+        ->middleware('admin');
     Route::resource('students.guardians', GuardianController::class)->only('show')->withTrashed(['show']);
     Route::patch('students/{student}/guardians/{guardian}/restore', [GuardianController::class, 'restore'])->name('students.guardians.restore')
         ->middleware('admin');
+
+    // cesty pre učiteľov
+    Route::resource('teachers', TeacherController::class)->only('index');
+    Route::resource('teachers', TeacherController::class)->only(['store', 'create', 'destroy', 'update', 'edit'])
+        ->middleware('admin');
+    Route::patch('teachers/{teacher}/restore', [TeacherController::class, 'restore'])->name('teachers.restore')
+        ->middleware('admin');
+    Route::resource('teachers', TeacherController::class)->only('show')->withTrashed(['show']);
 
     // Cesty pre predmety
 
     // Cesty pre rezervácie
 
-    // cesty pre učiteľov
 
     // Cesty pre udalosti
 

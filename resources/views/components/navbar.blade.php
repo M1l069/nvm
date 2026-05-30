@@ -30,7 +30,7 @@
                             Žiaci
                         </a>
                     @endif
-                    <a href="/teachers" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-yellow-300 hover:text-black">
+                    <a href="{{ route('teachers.index') }}" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-yellow-300 hover:text-black">
                         Učitelia
                     </a>
 
@@ -102,7 +102,7 @@
                 @if (auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Teacher)
                 <x-nav-link-phone href-name="students.index" :href="route('students.index')">Žiaci</x-nav-link-phone>
                 @endif
-                <x-nav-link-phone href="/teachers" href-name="teachers">Učitelia</x-nav-link-phone>
+                <x-nav-link-phone href="{{ route('teachers.index') }}" href-name="teachers">Učitelia</x-nav-link-phone>
                 <x-nav-link-phone href="/events" href-name="events">Udalosti</x-nav-link-phone>
                 <x-nav-link-phone href="{{ route('profile') }}" href-name="profile">Profil</x-nav-link-phone>
                 <form action="{{ route('logout') }}" method="POST">

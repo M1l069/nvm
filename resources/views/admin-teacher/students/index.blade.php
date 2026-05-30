@@ -25,6 +25,7 @@
                 <th class="px-4 py-3 text-left text-sm font-semibold">Tel.č. žiaka</th>
                 <th class="px-4 py-3 text-left text-sm font-semibold">Odbor</th>
                 <th class="px-4 py-3 text-left text-sm font-semibold">Špecializácia</th>
+                <th class="px-4 py-3 text-left text-sm font-semibold">Kapely žiaka</th>
                 <th class="px-4 py-3 text-left text-sm font-semibold">Dátum narodenia</th>
                 <th class="px-4 py-3 text-left text-sm font-semibold">Bydlisko</th>
                 @if(auth()->user()->role === \App\Enums\UserRole::Admin)
@@ -70,6 +71,13 @@
                     </td>
                     <td class="px-4 py-3">
                         {{ $student->specialization->name }}
+                    </td>
+                    <td class="px-4 py-3">
+                        @forelse($student->bands as $band)
+                            {{ $band->name }}
+                        @empty
+                            -
+                        @endforelse
                     </td>
                     <td class="px-4 py-3">
                         {{ $student->birth_date->format('d. m. Y') }}
