@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BandController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventParticipantController;
 use App\Http\Controllers\GuardianController;
@@ -61,6 +62,9 @@ Route::middleware('auth')->group(function () {
 
     // Cesty pre rezervácie nástrojov
 
+    // Cesty pre kapely
+    Route::resource('bands', BandController::class)->only('index');
+
     // Cesty pre udalosti
     Route::resource('events', EventController::class)->only('index');
     Route::resource('events', EventController::class)->only(['store', 'create', 'destroy', 'update', 'edit'])
@@ -72,4 +76,8 @@ Route::middleware('auth')->group(function () {
         ->name('my-events');
     Route::post('events/{event}/participants', [EventParticipantController::class, 'store'])
         ->name('events.participants.store');
+    Route::delete('events/{event}/participants', [EventParticipantController::class, 'destroy'])
+        ->name('events.participants.destroy');
+    Route::get('events/{event}/participants', [EventParticipantController::class, 'show'])->name('events.participants.show');
+    Route::delete('events/{event}/participants/{participant}', [EventParticipantController::class, 'destroyParticipant'])->name('events.participants.destroy-participant');
 });

@@ -8,81 +8,8 @@
                 </a>
                 <a href="/" class="text-yellow-300 font-medium text-xl hover:text-yellow-400">ISŠHU</a>
             </div>
-
-            {{-- Desktop menu --}}
-            <div class="hidden xl:flex xl:items-center xl:space-x-4">
-                @auth
-                    <a href="{{ route('home') }}"
-                        @class([
-                            'rounded-md px-3 py-2 text-sm font-medium hover:bg-yellow-300 hover:text-black',
-                            'text-gray-300' => !request()->routeIs('home'),
-                            'text-black bg-yellow-300' => request()->routeIs('home'),
-                        ])>
-                        Domov
-                    </a>
-                    @if (auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Teacher)
-                        <a href="{{ route('students.index') }}"
-                            @class([
-                                'rounded-md px-3 py-2 text-sm font-medium hover:bg-yellow-300 hover:text-black',
-                                'text-gray-300' => !request()->routeIs('students.index'),
-                                'text-black bg-yellow-300' => request()->routeIs('students.index'),
-                            ])>
-                            Žiaci
-                        </a>
-                    @endif
-                    <a href="{{ route('teachers.index') }}"  @class([
-                                'rounded-md px-3 py-2 text-sm font-medium hover:bg-yellow-300 hover:text-black',
-                                'text-gray-300' => !request()->routeIs('teachers.index'),
-                                'text-black bg-yellow-300' => request()->routeIs('teachers.index'),
-                            ])>
-                        Učitelia
-                    </a>
-                    <a href="{{ route('my-events') }}" @class([
-                                'rounded-md px-3 py-2 text-sm font-medium hover:bg-yellow-300 hover:text-black',
-                                'text-gray-300' => !request()->routeIs('events.index'),
-                                'text-black bg-yellow-300' => request()->routeIs('events.index'),
-                            ])>
-                        Moje udalosti
-                    </a>
-                    @switch(auth()->user()->role)
-                        @case(\App\Enums\UserRole::Admin)
-                            <x-navbar.admin/>
-                            @break
-
-                        @case(\App\Enums\UserRole::Teacher)
-                            <x-navbar.teacher/>
-                            @break
-
-                        @case(\App\Enums\UserRole::Student)
-                            <x-navbar.student/>
-                            @break
-
-                        @case(\App\Enums\UserRole::Parent)
-                            <x-navbar.guardian/>
-                            @break
-                    @endswitch
-
-                    <a href="{{ route('profile') }}"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="h-7 w-7">
-                        <circle cx="50" cy="50" r="50" fill="#e5e7eb"/>
-                        <circle cx="50" cy="36" r="18" fill="#6b7280"/>
-                        <path d="M20 88c4-22 18-34 30-34s26 12 30 34" fill="#6b7280"/>
-                    </svg> </a>
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="cursor-pointer rounded-md px-3 py-2 text-sm font-medium bg-orange-600 text-black hover:bg-orange-700">Odhlásiť sa</button>
-                    </form>
-                @else
-                    <a href="{{ route('login') }}" @class(['rounded-md px-3 py-2 text-sm font-medium
-                    hover:bg-yellow-300 hover:text-black', 'text-gray-300' => !request()->routeIs('auth.create'),
-                    'text-black bg-yellow-300' => request()->routeIs('auth.create')])>
-                        Prihlásiť sa
-                    </a>
-                @endauth
-            </div>
-
             {{-- Hamburger button --}}
-            <div class="xl:hidden">
+            <div>
                 <button
                     type="button"
                     @click="open = !open"
@@ -99,7 +26,7 @@
                         stroke="currentColor"
                     >
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M4 6h16M4 12h16M4 18h16" />
+                              d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
 
                     {{-- X ikona --}}
@@ -112,7 +39,7 @@
                         stroke="currentColor"
                     >
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M6 18L18 6M6 6l12 12" />
+                              d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </button>
             </div>
@@ -120,12 +47,13 @@
     </div>
 
     {{-- Mobile menu --}}
-    <div x-show="open" x-transition x-cloak class="xl:hidden">
+    <div x-show="open" x-transition x-cloak>
         <div class="flex flex-col items-end space-y-1 px-4 pb-4 pt-2 text-right">
             @auth
                 <x-nav-link-phone :href="route('home')" href-name="home">Domov</x-nav-link-phone>
                 @if (auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Teacher)
-                <x-nav-link-phone href-name="students.index" :href="route('students.index')">Žiaci</x-nav-link-phone>
+                    <x-nav-link-phone href-name="students.index" :href="route('students.index')">Žiaci
+                    </x-nav-link-phone>
                 @endif
                 <x-nav-link-phone href="{{ route('teachers.index') }}" href-name="teachers">Učitelia</x-nav-link-phone>
                 <x-nav-link-phone :href="route('my-events')" href-name="my-events">Moje Udalosti</x-nav-link-phone>
@@ -151,7 +79,10 @@
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="cursor-pointer rounded-md px-3 py-2 text-sm font-medium bg-orange-600 text-black hover:bg-orange-700">Odhlásiť sa</button>
+                    <button type="submit"
+                            class="cursor-pointer rounded-md px-3 py-2 text-sm font-medium bg-orange-600 text-black hover:bg-orange-700">
+                        Odhlásiť sa
+                    </button>
                 </form>
             @else
                 <x-nav-link-phone :href="route('login')" href-name="auth.*">Prihlásiť sa</x-nav-link-phone>

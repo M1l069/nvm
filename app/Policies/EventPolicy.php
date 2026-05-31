@@ -23,64 +23,12 @@ class EventPolicy
      */
     public function view(User $user, Event $event): bool
     {
-        if ($user->role === UserRole::Admin) {
+        if(!$event->trashed()) {
             return true;
         }
-
-        $event->loadMissing(['participants', 'bands']);
-
-        if ($user->role === UserRole::Teacher) {
-            $teacher = $user->teacher;
-
-            if (! $teacher) {
-                return false;
-            }
-
-            return $event->teacher_id === $teacher->id
-                || $event->participants->contains('id', $user->id)
-                || $event->bands->contains('teacher_id', $teacher->id);
+        else {
+            return $user->role === UserRole::Admin;
         }
-
-        if ($user->role === UserRole::Student) {
-            $student = $user->student;
-
-            if (! $student) {
-                return false;
-            }
-
-
-            $studentBandIds = $student->bands()->pluck('bands.id')->toArray();
-
-            return $event->participants->contains('id', $user->id)
-                || $event->bands->pluck('id')->intersect($studentBandIds)->isNotEmpty();
-        }
-
-        if ($user->role === UserRole::Parent) {
-            $guardian = $user->guardian;
-
-            if (! $guardian) {
-                return false;
-            }
-
-            $children = $guardian->students()
-                ->with('bands')
-                ->get();
-
-
-            $childrenUserIds = $children->pluck('user_id')->toArray();
-
-
-            $childrenBandIds = $children
-                ->flatMap(fn ($child) => $child->bands->pluck('id'))
-                ->unique()
-                ->toArray();
-
-            return $event->participants->contains('id', $user->id)
-                || $event->participants->pluck('id')->intersect($childrenUserIds)->isNotEmpty()
-                || $event->bands->pluck('id')->intersect($childrenBandIds)->isNotEmpty();
-        }
-
-        return false;
     }
 
 

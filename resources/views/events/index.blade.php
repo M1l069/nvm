@@ -30,14 +30,14 @@
                     <th class="px-4 py-3 text-left text-sm font-semibold">Popis udalosti</th>
                     <th class="px-4 py-3 text-left text-sm font-semibold">Dostupnosť</th>
                     <th class="px-4 py-3 text-left text-sm font-semibold">Zobraziť</th>
-                    <th class="px-4 py-3 text-left text-sm font-semibold">Prihlásenie</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold">Akcie s účasťou</th>
                     @if(auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Teacher)
                         <th class="px-4 py-3 text-right text-sm font-semibold">Akcie</th>
                     @endif
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
-            @foreach ($events as $event)
+            @forelse ($events as $event)
                 <tr class="hover:bg-slate-50">
                     <td class="px-4 py-3">
                         <a href="{{ route('teachers.show', $event->responsibleTeacher) }}" class="hover:text-blue-800">
@@ -112,12 +112,29 @@
                         <a href="{{ route('events.show', $event) }}" class="text-blue-700 hover:underline">Zobraziť</a>
                     </td>
                     <td class="px-4 py-3">
-                        @if($event->participants->count() < $event->capacity)
-                            <a href="{{ route('events.participants.store', $event) }}" class="text-blue-700 hover:text-blue-900">
-                                Zúčastniť sa
-                            </a>
+                        @if($event->is_public)
+                            @if($event->participants->count() < $event->capacity && !$event->participants->contains('id', auth()->id()))
+                                <form action="{{ route('events.participants.store', $event) }}" method="POST">
+                                    @csrf
+                                    <button class="text-blue-700 hover:text-blue-900 cursor-pointer">
+                                        Zúčastniť sa
+                                    </button>
+                                </form>
+                            @endif
+
+                            @if($event->participants->contains('id', auth()->id()))
+                                <form action="{{ route('events.participants.store', $event) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="text-red-500 hover:text-red-700 cursor-pointer">
+                                        Zrušiť účasť
+                                    </button>
+                                </form>
+                            @endif
                         @else
-                            <p> - </p>
+                            <p>
+                                Udalosť je neverejná
+                            </p>
                         @endif
                     </td>
                     @if(auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Teacher)
@@ -147,7 +164,8 @@
                         </td>
                     @endif
                 </tr>
-            @endforeach
+            @empty
+            @endforelse
             </tbody>
 
         </table>

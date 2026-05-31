@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\UserRole;
 use App\Models\Event;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class EventParticipantController extends Controller
@@ -17,56 +18,90 @@ class EventParticipantController extends Controller
 
         $events = Event::with(['room', 'bands', 'responsibleTeacher.user'])
             ->whereHas('participants', function ($query) use ($user) {
-                $query->where(['users.id', $user->id]);
+                $query->where('users.id', $user->id);
             })->latest()->paginate();
         return view('events.participants.index', compact('events'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show participants for the event.
      */
-    public function create()
-    {
-        //
+    public function show(Event $event) {
+        $user = auth()->user();
+        if($user->role === UserRole::Admin) {
+            $participants =  $event->participants()->latest()->get();
+            return view('events.participants.show', compact('event', 'participants'));
+        }
+
+        else if($user->role === UserRole::Teacher) {
+            if($user->teacher->id === $event->teacher_id ||  $event->bands->contains('teacher_id', $user->teacher->id)) {
+                $participants = $event->participants()->latest()->get();
+                return view('events.participants.show', compact('event', 'participants'));
+            }
+        }
+        return redirect()->back()
+            ->with('error',
+                'Zoznam zúčastnených si môže prezrieť len zodpovedný učiteľ za udalosť,
+                 admin alebo učiteľ, ktorý vedie vystupujúcu kapelu');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Event $event)
     {
-        //
-    }
+        $user = $request->user();
+        if(!$event->is_public) {
+            return redirect()->back()
+                ->with('error', 'Nemôžete sa prihlásiť na neverejnú udalosť');
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        if ($event->participants()->where('users.id', $user->id)->exists()) {
+            return redirect()
+                ->back()
+                ->with('error', 'Na túto udalosť ste už prihlásený.');
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        if($event->participants->count() >= $event->capacity) {
+            return redirect()->back()->with('error', 'Udalosť má plnú kapacitu');
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+        $event->participants()->attach($user->id);
+        return redirect()->back()->with('success', 'Úspešne ste sa prihlásili na udalosť ' . $event->name);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Event $event)
     {
-        //
+        $user = auth()->user();
+
+        if(!$event->participants()->where('users.id', $user->id)->exists()) {
+            return redirect()->back()
+                ->with('error', 'Nemôžete sa prihlásiť na udalosť, na ktorú nie ste prihlásený');
+        }
+
+        $event->participants()->detach($user->id);
+
+        return redirect()->back()->with('success', 'Úspešne ste sa odhlásili z udalosti');
+    }
+
+    public function destroyParticipant(Event $event, User $user) {
+        $authUser = auth()->user();
+
+        if($authUser->role === UserRole::Admin) {
+            $event->participants()->detach($user->id);
+            return redirect()->back()->with('success', 'Účastník odstránený z udalosti');
+        }
+
+        if($authUser->role === UserRole::Teacher) {
+            if($authUser->teacher->id === $event->teacher_id) {
+                $event->participants()->detach($user);
+                return redirect()->back()->with('success', 'Účastník odstránený z udalosti');
+            }
+        }
+
+        return redirect()->back()->with('error', 'Účastníka môže odstrániť z udalosti len admin alebo učiteľ zodpovedný za udalosť');
     }
 }

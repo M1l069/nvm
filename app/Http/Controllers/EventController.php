@@ -40,8 +40,6 @@ class EventController extends Controller
                 ->latest();
         }
 
-        // Admin nič nefiltruje, vidí všetko.
-
         $events = $events->paginate();
         return view('events.index', compact('events'));
     }

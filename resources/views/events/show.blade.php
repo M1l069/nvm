@@ -14,7 +14,7 @@
                 @if($event->room)
                     <div>
                         <p class="text-sm font-medium text-slate-500">V miestnosti:</p>
-                        <p class="text-slate-800">{{ $event->room_id->name }}</p>
+                        <p class="text-slate-800">{{ $event->room->name }}</p>
                     </div>
                 @else
                     <div>
@@ -46,16 +46,41 @@
                         <p class="text-red-500">Neverejné</p>
                     @endif
                 </div>
-                @if($participantsCount < $event->capacity)
-                    <div class="col-span-2 flex justify-end">
-                        <a href="{{ route('events.participants.store', $event) }}" class="bg-yellow-300
-                                text-black py-2 px-2 rounded-md hover:bg-yellow-400">Zúčastniť sa</a>
-                    </div>
+                @if($event->is_public)
+                    @if($participantsCount < $event->capacity && !$event->participants->contains('id', auth()->id()))
+                        <div class="col-span-2 flex justify-end">
+                            <form action="{{ route('events.participants.store', $event) }}" method="POST">
+                                @csrf
+                            <button class="bg-yellow-300
+                            text-black py-2 px-2 rounded-md hover:bg-yellow-400 cursor-pointer">
+                                Zúčastniť sa
+                            </button>
+                            </form>
+                        </div>
+                    @endif
+                    @if($event->participants->contains('id', auth()->id()))
+                        <div class="col-span-2 flex justify-end">
+                            <form action="{{ route('events.participants.destroy', $event) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button class="bg-red-600
+                                    text-black py-2 px-2 rounded-md hover:bg-red-700 cursor-pointer">
+                                    Zrušiť účasť
+                                </button>
+                            </form>
+                        </div>
+                    @endif
                 @endif
             </div>
             @if(auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Teacher)
+                <div class="flex justify-start">
+                    <a href="{{ route('events.participants.show', $event) }}" class="bg-yellow-300
+                            text-black py-2 px-2 rounded-md hover:bg-yellow-400">
+                        Účastníci
+                    </a>
+                </div>
                 @if(!$event->trashed())
-                    <div class="flex justify-end">
+                    <div class="flex justify-end mt-4">
                         <a href="{{ route('events.edit', $event) }}" class="bg-yellow-300
                             text-black py-2 px-2 rounded-md hover:bg-yellow-400">Upraviť </a>
                     </div>

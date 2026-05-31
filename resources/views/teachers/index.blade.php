@@ -31,7 +31,7 @@
             </thead>
 
             <tbody class="divide-y divide-slate-100">
-                @foreach($teachers as $teacher)
+                @forelse($teachers as $teacher)
                     <tr class="hover:bg-slate-50">
                         <td class="px-4 py-3">
                             <a href="{{ route('teachers.show', $teacher) }}" class="hover:text-blue-800">
@@ -79,8 +79,8 @@
                             </td>
                         @endif
                     </tr>
-
-                @endforeach
+                @empty
+                @endforelse
             </tbody>
         </table>
     </div>
