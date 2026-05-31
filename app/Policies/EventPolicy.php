@@ -127,6 +127,17 @@ class EventPolicy
      */
     public function delete(User $user, Event $event): bool
     {
+        if ($user->role === UserRole::Admin) {
+            return true;
+        }
+
+        if ($user->role === UserRole::Teacher) {
+            if (! $user->teacher) {
+                return false;
+            }
+
+            return $event->teacher_id === $user->teacher->id;
+        }
         return false;
     }
 
@@ -135,7 +146,7 @@ class EventPolicy
      */
     public function restore(User $user, Event $event): bool
     {
-        return false;
+        return $user->role === UserRole::Admin;
     }
 
     /**

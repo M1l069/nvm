@@ -1,4 +1,17 @@
 <x-layout>
+    @if($errors->any())
+        <div class="mx-auto mt-8 w-full max-w-lg px-4">
+            <div role="alert" class="rounded-md border-l-4 border-red-300 bg-red-100 p-4 text-red-700 opacity-75">
+                <p class="font-bold">Chyba validácie!</p>
+
+                <ul class="mt-2 list-disc pl-5">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    @endif
     <div class="flex items-center justify-center px-4 py-10 sm:items-center sm:py-16">
         <article class="w-full max-w-lg rounded-xl border border-slate-300 bg-white p-6 shadow-md sm:p-8">
             <h1 class="mb-8 text-center text-3xl font-semibold sm:text-4xl">Upraviť udalosť</h1>
@@ -127,7 +140,14 @@
                         <select
                             name="room"
                             id="room"
-                            x-on:change="roomSelected = $event.target.value !== ''"
+                            x-on:change="roomSelected = $event.target.value !== '';
+                             if (roomSelected) {
+                                document.getElementById('street').value = null;
+                                document.getElementById('postal_code').value = null;
+                                document.getElementById('city').value = null;
+                                document.getElementById('country').value = null;
+                                document.getElementById('capacity').value = null;
+                            }"
                             @class(['w-full rounded-md  px-4 py-2 text-base
                         focus:border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200',
                         'border border-slate-300' => !$errors->has('room'),
@@ -137,7 +157,7 @@
                             @foreach($rooms as $room)
                                 <option
                                     value="{{ $room->id }}"
-                                    @selected(old('room', $event->room_id) == $room->id)>
+                                    @selected(old('room', $event->room_id ? $event->room_id : null) == $room->id)>
                                     {{ $room->name  }}
                                 </option>
                             @endforeach
@@ -151,18 +171,18 @@
 
 
                     <div x-show="!roomSelected" x-cloak>
-                        <x-form.text-input name="street" placeholder="Ulica" :value="$event->street">
+                        <x-form.text-input name="street" placeholder="Ulica" :value="$event->room_id ? null : $event->street">
                             <x-form.label :required="false" name="street">Ulica:</x-form.label>
                         </x-form.text-input>
 
                         <div class="mt-4">
-                            <x-form.text-input name="postal_code" placeholder="PSČ" :value="$event->postal_code">
+                            <x-form.text-input name="postal_code" placeholder="PSČ" :value="$event->room_id ? null : $event->postal_code">
                                 <x-form.label name="postal_code" :required="false">PSČ:</x-form.label>
                             </x-form.text-input>
                         </div>
 
                         <div class="mt-4">
-                            <x-form.text-input name="city" placeholder="Bratislava" :value="$event->city">
+                            <x-form.text-input name="city" placeholder="Bratislava" :value="$event->room_id ? null : $event->city">
                                 <x-form.label name="city" :required="false">Mesto:</x-form.label>
                             </x-form.text-input>
                         </div>
@@ -174,14 +194,14 @@
                                 id="country"
                                 @class(['w-full rounded-md  px-4 py-2 text-base
                         focus:border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200',
-                        'border border-slate-300' => !$errors->has('room'),
-                        'border border-red-500' => $errors->has('room')])>
+                        'border border-slate-300' => !$errors->has('country'),
+                        'border border-red-500' => $errors->has('country')])>
                                 <option value="">--Vyberte krajinu--</option>
 
                                 @foreach($countries as $code => $country)
                                     <option
                                         value="{{ $code }}"
-                                        @selected(old('country', $event->country) == $code)>
+                                        @selected(old('country', $event->room_id ? null : $event->country) == $code)>
                                         {{ $country }}
                                     </option>
                                 @endforeach
@@ -193,7 +213,7 @@
                             </div>
                         </div>
                         <div class="mt-4">
-                            <x-form.number-input name="capacity" placeholder="napr. 300" :value="$event->capacity">
+                            <x-form.number-input name="capacity" placeholder="napr. 300" :value="$event->room_id ? null : $event->capacity">
                                 <x-form.label :required="false" name="capacity">Kapacita udalosti: </x-form.label>
                             </x-form.number-input>
                         </div>
@@ -217,6 +237,9 @@
                         @checked(old('is_public', $event->is_public))
                         class="h-4 w-4 rounded border-slate-300 text-yellow-400 focus:ring-yellow-300"
                     >
+                    @error('is_public')
+                    <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
                 </div>
                 <div class="mt-3 pt-2 flex justify-end">
                     <button

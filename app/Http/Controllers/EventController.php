@@ -279,18 +279,32 @@ class EventController extends Controller
         ]);
         $event->bands()->sync($data['band']);
         return redirect()->route('events.show', $event)
+            ->withErrors([
+                'teacher' => 'Udalosť môže upraviť len učiteľ, ktorý je za ňu zodpovedný.'
+            ])
             ->with('success', 'Udalosť úspešne upravená.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Event $event)
     {
-        //
+        Gate::authorize('delete', $event);
+        $event->delete();
+        return redirect()->route('events.index')->with('success', 'Udalosť úspešne vymazaná.');
     }
 
-    public function restore(Event $event) {
+    public function restore($event)
+    {
+        $event = Event::withTrashed()->findOrFail($event);
 
+        Gate::authorize('restore', $event);
+
+        $event->restore();
+
+        return redirect()
+            ->route('events.show', $event)
+            ->with('success', 'Udalosť bola úspešne obnovená.');
     }
 }
