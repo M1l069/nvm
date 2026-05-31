@@ -10,9 +10,11 @@
     "license": "MIT",
     "require": {
         "php": "^8.3",
+        "axlon/laravel-postal-code-validation": "^3.9",
         "laravel-lang/lang": "^15.31",
         "laravel/framework": "^13.8",
         "laravel/tinker": "^3.0",
+        "league/iso3166": "^4.4",
         "propaganistas/laravel-phone": "^6.0"
     },
     "require-dev": {

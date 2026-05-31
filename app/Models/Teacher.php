@@ -19,6 +19,10 @@ class Teacher extends Model
         return $this->hasMany(SubjectSchoolYear::class);
     }
 
+    public function events():HasMany {
+        return $this->hasMany(Event::class);
+    }
+
     public function grades():HasMany { return $this->hasMany(Grade::class); }
     public function bands():HasMany { return $this->hasMany(Band::class); }
 

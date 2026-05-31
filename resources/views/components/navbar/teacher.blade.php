@@ -1,7 +1,7 @@
-<a href="{{ route('teachers.index') }}" @class([
+<a href="{{ route('events.index') }}" @class([
                                 'rounded-md px-3 py-2 text-sm font-medium hover:bg-yellow-300 hover:text-black',
-                                'text-gray-300' => !request()->routeIs('teachers.index'),
-                                'text-black bg-yellow-300' => request()->routeIs('teachers.index'),
+                                'text-gray-300' => !request()->routeIs('events.index'),
+                                'text-black bg-yellow-300' => request()->routeIs('events.index'),
                             ])>
     Udalosti
 </a>

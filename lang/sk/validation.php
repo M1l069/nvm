@@ -167,6 +167,8 @@ return [
         'postal_code' => 'PSČ',
         'city' => 'Mesto',
         'country' => 'Krajina',
-        'birth_date' => 'Dátum narodenia'
+        'birth_date' => 'Dátum narodenia',
+        'band' => 'kapela',
+        'type' => 'typ'
     ],
 ];

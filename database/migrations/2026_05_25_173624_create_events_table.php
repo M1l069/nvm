@@ -23,7 +23,10 @@ return new class extends Migration
             $table->dateTime('starts_at');
             $table->dateTime('ends_at');
             $table->foreignId('room_id')->nullable()->constrained()->nullOnDelete(); // len ak sa udalosť koná v škole
-            $table->string('location')->nullable(); // len ak sa udalosť koná mimo školy
+            $table->string('street')->nullable();
+            $table->string('postal_code')->nullable();
+            $table->string('city')->nullable();
+            $table->string('country')->nullable();// len ak sa udalosť koná mimo školy
             $table->unsignedSmallInteger('capacity')->nullable(); // len pre udalosti mimo školy
             $table->text('description')->nullable();
             $table->boolean('is_public')->default(false);

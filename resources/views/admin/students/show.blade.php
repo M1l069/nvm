@@ -169,7 +169,12 @@
                             </form>
                         </div>
                     @endif
-
+                    <div class="col-span-2 flex justify-end mb-4">
+                        <a href="{{ route('students.guardians.show', ['student' => $student, 'guardian' => $guardian]) }}"
+                        class="bg-yellow-300 text-black py-2 px-2 rounded-md hover:bg-yellow-400">
+                            Zobraziť
+                        </a>
+                    </div>
                 @empty
                     <p class="text-slate-500">Žiak nemá priradeného zákonného zástupcu.</p>
                 @endforelse
@@ -184,6 +189,7 @@
                     </div>
                 @endif
             @endif
+
         </x-card>
     </div>
 </x-layout>

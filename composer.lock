@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4a3e2c392f7fc7f78608901a7ace0677",
+    "content-hash": "46cda9f09fe34c3edde09fa4fec6201c",
     "packages": [
         {
             "name": "archtechx/enums",
@@ -58,6 +58,72 @@
                 "source": "https://github.com/archtechx/enums/tree/v1.1.2"
             },
             "time": "2025-06-06T23:15:09+00:00"
+        },
+        {
+            "name": "axlon/laravel-postal-code-validation",
+            "version": "v3.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/axlon/laravel-postal-code-validation.git",
+                "reference": "cb6d23c3502c54eb9188a90ddf3a8bccd2c317bd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/axlon/laravel-postal-code-validation/zipball/cb6d23c3502c54eb9188a90ddf3a8bccd2c317bd",
+                "reference": "cb6d23c3502c54eb9188a90ddf3a8bccd2c317bd",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^5.5 || ^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0 || ^12.0 || ^13.0",
+                "illuminate/support": "^5.5 || ^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0 || ^12.0 || ^13.0",
+                "illuminate/validation": "^5.5 || ^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0 || ^12.0 || ^13.0",
+                "php": "^7.2 || ^8.0"
+            },
+            "require-dev": {
+                "guzzlehttp/guzzle": "^7.8",
+                "phpunit/phpunit": "^8.5 || ^9.6 || ^10.5",
+                "symfony/var-exporter": "^4.0 || ^5.0 || ^6.0 || ^7.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "PostalCodes": "\\Axlon\\PostalCodeValidation\\Support\\Facades\\PostalCodes"
+                    },
+                    "providers": [
+                        "\\Axlon\\PostalCodeValidation\\ValidationServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Axlon\\PostalCodeValidation\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Choraimy Kroonstuiver",
+                    "homepage": "https://github.com/axlon"
+                }
+            ],
+            "description": "Worldwide postal code validation for Laravel and Lumen",
+            "keywords": [
+                "laravel",
+                "lumen",
+                "post code",
+                "postal code",
+                "validation",
+                "zip code"
+            ],
+            "support": {
+                "issues": "https://github.com/axlon/laravel-postal-code-validation/issues",
+                "source": "https://github.com/axlon/laravel-postal-code-validation/tree/v3.9.0"
+            },
+            "time": "2026-03-20T09:46:26+00:00"
         },
         {
             "name": "brick/math",
@@ -2855,6 +2921,73 @@
                 "source": "https://github.com/thephpleague/flysystem-local/tree/3.31.0"
             },
             "time": "2026-01-23T15:30:45+00:00"
+        },
+        {
+            "name": "league/iso3166",
+            "version": "4.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/alcohol/iso3166.git",
+                "reference": "928ac7ecc569db9123a83ef5b1c6efc279e7cb49"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/alcohol/iso3166/zipball/928ac7ecc569db9123a83ef5b1c6efc279e7cb49",
+                "reference": "928ac7ecc569db9123a83ef5b1c6efc279e7cb49",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": "^7.4 || ^8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.12.6",
+                "phpstan/phpstan-deprecation-rules": "^1.2.1",
+                "phpstan/phpstan-strict-rules": "^1.6.1",
+                "phpunit/phpunit": "^9.6.21"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\ISO3166\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rob Bast",
+                    "email": "rob.bast@gmail.com"
+                }
+            ],
+            "description": "ISO 3166-1 PHP Library",
+            "homepage": "https://github.com/alcohol/iso3166",
+            "keywords": [
+                "3166",
+                "3166-1",
+                "ISO 3166",
+                "countries",
+                "iso",
+                "library"
+            ],
+            "support": {
+                "issues": "https://github.com/alcohol/iso3166/issues",
+                "source": "https://github.com/alcohol/iso3166"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/alcohol",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-01-02T09:49:36+00:00"
         },
         {
             "name": "league/mime-type-detection",

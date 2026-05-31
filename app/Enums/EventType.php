@@ -10,7 +10,7 @@ enum EventType: string
     public function label(): string {
         return match ($this) {
             self::Concert => 'Koncert',
-            self::Trip => 'Výlet'
+            self::Trip => 'Sústredenie'
         };
     }
 }

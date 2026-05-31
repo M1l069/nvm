@@ -28,6 +28,7 @@
                 <th class="px-4 py-3 text-left text-sm font-semibold">Kapely žiaka</th>
                 <th class="px-4 py-3 text-left text-sm font-semibold">Dátum narodenia</th>
                 <th class="px-4 py-3 text-left text-sm font-semibold">Bydlisko</th>
+                <th class="px-4 py-3 text-left text-sm font-semibold">Zobraziť</th>
                 @if(auth()->user()->role === \App\Enums\UserRole::Admin)
                     <th class="px-4 py-3 text-right text-sm font-semibold">Akcie</th>
                 @endif
@@ -84,6 +85,9 @@
                     </td>
                     <td class="px-4 py-3">
                         {{ $student->street }}, {{ $student->postal_code }}  {{ $student->city }}, {{ $student->country }}
+                    </td>
+                    <td class="px-4 py-3">
+                        <a href="{{ route('students.show', $student) }}" class="text-blue-700 hover:underline">Zobraziť</a>
                     </td>
                     @if(auth()->user()->role === \App\Enums\UserRole::Admin)
                     <td class="px-4 py-3 text-right">

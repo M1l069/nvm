@@ -61,7 +61,7 @@ Route::middleware('auth')->group(function () {
     // Cesty pre rezervácie nástrojov
 
     // Cesty pre udalosti
-    Route::resource('events', EventController::class)->only(['index', 'show']);
+    Route::resource('events', EventController::class)->only('index');
     Route::resource('events', EventController::class)->only(['store', 'create', 'destroy', 'update', 'edit'])
         ->middleware('admin-teacher');
     Route::patch('events/{event}/restore', [EventController::class, 'restore'])->name('events.restore')
