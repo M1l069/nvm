@@ -109,27 +109,55 @@ class EventController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new Event, where admin can add any teacher as responsible for the event,
+     * and any band to event.
+     * Teacher can only add himself as responsible for the event, and he can only
+     * add bands to the event where he is responsible for the bands.
+     *
+     *
      */
     public function create()
     {
+        Gate::authorize('create', Event::class);
+
         $rooms = Room::latest()->get();
-        $bands = Band::latest()->get();
-        $teachers = Teacher::with('user')->latest()->get();
-        if (auth()->user()->role === UserRole::Teacher) {
+        $countries = __('countries');
+
+        $user = auth()->user();
+
+        if ($user->role === UserRole::Teacher) {
+            $teacher = $user->teacher;
+
+            if (! $teacher) {
+                abort(403, 'Nemáte učiteľské konto.');
+            }
+
             $teachers = Teacher::with('user')
-                ->where('user_id', auth()->id())
+                ->whereKey($teacher->id)
+                ->get();
+
+            $bands = Band::where('teacher_id', $teacher->id)
+                ->latest()
+                ->get();
+        } else {
+            $teachers = Teacher::with('user')
+                ->latest()
+                ->get();
+
+            $bands = Band::latest()
                 ->get();
         }
-        $countries = __('countries');
-        return view('events.create', compact('rooms', 'bands', 'teachers', 'countries'));
+
+        return view('events.create',
+            compact('rooms', 'bands', 'teachers', 'countries'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created Event in storage.
      */
     public function store(EventRequest $request)
     {
+        Gate::authorize('create', Event::class);
         $data = $request->validated();
         $user = $request->user();
 
@@ -144,7 +172,7 @@ class EventController extends Controller
             }
         }
 
-        $data['room'] ? $room = Event::where('room_id', $data['room'])->first() : $room = null; ;
+        $data['room'] ? $room = Event::where('room_id', $data['room'])->first() : $room = null;
 
         $event = Event::create([
             'name' => $data['name'],
@@ -169,7 +197,7 @@ class EventController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified Event.
      */
     public function show(Event $event)
     {
@@ -180,28 +208,78 @@ class EventController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified Event.
      */
     public function edit(Event $event)
     {
+        Gate::authorize('update', $event);
+        $event->load(['bands', 'responsibleTeacher.user']);
+
         $rooms = Room::latest()->get();
-        $bands = Band::latest()->get();
-        $teachers = Teacher::with('user')->latest()->get();
+        $countries = __('countries');
+
         if (auth()->user()->role === UserRole::Teacher) {
+            $teacher = auth()->user()->teacher;
+
+            if (! $teacher) {
+                abort(403, 'Nemáte učiteľské konto.');
+            }
+
             $teachers = Teacher::with('user')
-                ->where('user_id', auth()->id())
+                ->whereKey($teacher->id)
+                ->get();
+
+            $bands = Band::where('teacher_id', $teacher->id)
+                ->latest()
+                ->get();
+        } else {
+            $teachers = Teacher::with('user')
+                ->latest()
+                ->get();
+
+            $bands = Band::latest()
                 ->get();
         }
-        $countries = __('countries');
-        return view('events.edit', compact('rooms', 'bands', 'teachers', 'countries'));
+        return view('events.edit', compact('event','rooms', 'bands', 'teachers', 'countries'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(EventRequest $request, Event $event)
     {
-        //
+        Gate::authorize('update', $event);
+        $data = $request->validated();
+        if (auth()->user()->role === UserRole::Teacher) {
+            $teacher = auth()->user()->teacher;
+            if (!$teacher) {
+                abort(403, 'Nemáte učiteľské konto');
+            }
+            if((int)$data['teacher'] !== $teacher->id) {
+                return redirect()->back()->with('error',
+                    'Novú udalosť môže pridať len učiteľ, ktorý je za ňu zodpovedný');
+            }
+        }
+
+        $data['room'] ? $room = Event::where('room_id', $data['room'])->first() : $room = null;
+        $event->update([
+            'name' => $data['name'],
+            'description' => $data['description'],
+            'teacher_id' => $data['teacher'],
+            'type' => $data['type'],
+            'starts_at' => $data['starts_at'],
+            'ends_at' => $data['ends_at'],
+            'room_id' => $data['room'],
+            'street' => $data['street'],
+            'postal_code' => $data['postal_code'],
+            'city' => $data['city'],
+            'country' => $data['country'],
+            'capacity' => $data['room'] ? $room->capacity : $data['capacity'],
+            'is_public' => $data['is_public'],
+        ]);
+        $event->bands()->sync($data['band']);
+        return redirect()->route('events.show', $event)
+            ->with('success', 'Udalosť úspešne upravená.');
     }
 
     /**
@@ -210,5 +288,9 @@ class EventController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function restore(Event $event) {
+
     }
 }

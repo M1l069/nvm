@@ -38,11 +38,11 @@ class EventRequest extends FormRequest
             'ends_at' => 'required|date|after:starts_at',
             'room' => ['nullable', Rule::exists('rooms', 'id')->whereNull('deleted_at'),
                 'required_without_all:street,city,country,postal_code'],
-            'street' => 'nullable|string|max:255|required_without:room|prohibited_with:room',
-            'city' => 'nullable|string|max:255|required_without:room|prohibited_with:room',
-            'country' => 'nullable|string|size:2|required_without:room|prohibited_with:room',
-            'postal_code' => 'nullable|string|postal_code_for:country|required_without:room|prohibited_with:room',
-            'capacity' => 'nullable|integer|min:1|required_without:room|prohibited_with:room',
+            'street' => 'nullable|string|max:255|required_without:room',
+            'city' => 'nullable|string|max:255|required_without:room',
+            'country' => ['nullable','string', 'size:2', 'required_without:room', Rule::in(array_keys(__('countries')))],
+            'postal_code' => 'nullable|string|postal_code_for:country|required_without:room|postal_code:country',
+            'capacity' => 'nullable|integer|min:1|required_without:room',
             'description' => 'nullable|string',
             'is_public' => 'required|boolean',
         ];
@@ -52,6 +52,17 @@ class EventRequest extends FormRequest
     {
         return [
             function (Validator $validator) {
+                if ($this->filled('room')) {
+                    foreach (['street', 'city', 'country', 'postal_code', 'capacity'] as $field) {
+                        if ($this->filled($field)) {
+                            $validator->errors()->add(
+                                $field,
+                                'Ak je vybraná miestnosť, nezadávajte vlastnú adresu ani kapacitu udalosti.'
+                            );
+                        }
+                    }
+                }
+
                 if (! $this->filled('starts_at') || ! $this->filled('ends_at')) {
                     return;
                 }

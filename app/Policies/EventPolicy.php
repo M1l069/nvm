@@ -96,6 +96,7 @@ class EventPolicy
         if($user->role === UserRole::Teacher) {
             return true;
         }
+        return false;
     }
 
     /**
@@ -103,6 +104,21 @@ class EventPolicy
      */
     public function update(User $user, Event $event): bool
     {
+        if($user->role === UserRole::Admin) {
+            return true;
+        }
+
+        $event->loadMissing(['participants', 'bands']);
+
+        if($user->role === UserRole::Teacher) {
+            $teacher = $user->teacher;
+            if(! $teacher) {
+                return false;
+            }
+            return $event->teacher_id === $teacher->id
+                || $event->bands->contains('teacher_id', $teacher->id);
+        }
+
         return false;
     }
 
