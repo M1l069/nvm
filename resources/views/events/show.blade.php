@@ -14,13 +14,12 @@
                 @if($event->room)
                     <div>
                         <p class="text-sm font-medium text-slate-500">V miestnosti:</p>
-                        <p class="text-slate-800">{{ $event->room->name }}</p>
+                        <p class="text-slate-800">{{ $event->room_id->name }}</p>
                     </div>
-                @endif
-                @if($event->location)
+                @else
                     <div>
                         <p class="text-sm font-medium text-slate-500">Na mieste:</p>
-                        <p class="text-slate-800">{{ $event->location }}</p>
+                        <p class="text-slate-800">{{ $event->street }}, {{ $event->city }}, {{ $event->postal_code }}, {{$event->country }}</p>
                     </div>
                 @endif
                 <div>
@@ -30,10 +29,6 @@
                 <div>
                     <p class="text-sm font-medium text-slate-500">Končí:</p>
                     <p class="text-slate-800">{{ $event->ends_at->format('d. m. Y H:i') }}</p>
-                </div>
-                <div>
-                    <p class="text-sm font-medium text-slate-500">V miestnosti:</p>
-                    <p class="text-slate-800">{{ $event->room->name }}</p>
                 </div>
                 <div>
                     <p class="text-sm font-medium text-slate-500">Kapacita:</p>
@@ -51,6 +46,12 @@
                         <p class="text-red-500">Neverejné</p>
                     @endif
                 </div>
+                @if($participantsCount < $event->capacity)
+                    <div class="col-span-2 flex justify-end">
+                        <a href="{{ route('events.participants.store', $event) }}" class="bg-yellow-300
+                                text-black py-2 px-2 rounded-md hover:bg-yellow-400">Zúčastniť sa</a>
+                    </div>
+                @endif
             </div>
             @if(auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Teacher)
                 @if(!$event->trashed())

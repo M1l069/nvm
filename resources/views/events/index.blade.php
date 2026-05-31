@@ -30,6 +30,7 @@
                     <th class="px-4 py-3 text-left text-sm font-semibold">Popis udalosti</th>
                     <th class="px-4 py-3 text-left text-sm font-semibold">Dostupnosť</th>
                     <th class="px-4 py-3 text-left text-sm font-semibold">Zobraziť</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold">Prihlásenie</th>
                     @if(auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Teacher)
                         <th class="px-4 py-3 text-right text-sm font-semibold">Akcie</th>
                     @endif
@@ -75,9 +76,9 @@
                         @endif
                     </td>
                     <td class="px-4 py-3">
-                        @if($event->location)
+                        @if(!$event->room)
                             <p>
-                                {{ $event->location }}
+                                {{ $event->street }}, {{ $event->city }}, {{ $event->postal_code }}, {{ $event->country }}
                             </p>
                         @else
                             <p>
@@ -109,6 +110,15 @@
                     </td>
                     <td class="px-4 py-3">
                         <a href="{{ route('events.show', $event) }}" class="text-blue-700 hover:underline">Zobraziť</a>
+                    </td>
+                    <td class="px-4 py-3">
+                        @if($event->participants->count() < $event->capacity)
+                            <a href="{{ route('events.participants.store', $event) }}" class="text-blue-700 hover:text-blue-900">
+                                Zúčastniť sa
+                            </a>
+                        @else
+                            <p> - </p>
+                        @endif
                     </td>
                     @if(auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Teacher)
                         <td class="px-4 py-3">

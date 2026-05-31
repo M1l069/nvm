@@ -19,87 +19,25 @@ class EventController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
-
-        $events = Event::with([
-            'participants',
-            'room',
-            'bands',
-            'responsibleTeacher.user',
-        ])
-            ->withCount('participants')
-            ->latest();
-
-        if ($user->role === UserRole::Student) {
-            $student = $user->student;
-
-            if (! $student) {
-                abort(403);
-            }
-
-            $studentBandIds = $student->bands()->pluck('bands.id');
-
-            $events->where(function ($query) use ($user, $studentBandIds) {
-                $query->whereHas('participants', function ($participantQuery) use ($user) {
-                    $participantQuery->where('users.id', $user->id);
-                })
-                    ->orWhereHas('bands', function ($bandQuery) use ($studentBandIds) {
-                        $bandQuery->whereIn('bands.id', $studentBandIds);
-                    });
-            });
+        if(auth()->user()->role === UserRole::Admin) {
+            $events = Event::withTrashed()->with([
+                'participants',
+                'room',
+                'bands',
+                'responsibleTeacher.user',
+            ])
+                ->withCount('participants')
+                ->latest();
         }
-
-        if ($user->role === UserRole::Teacher) {
-            $teacher = $user->teacher;
-
-            if (! $teacher) {
-                abort(403);
-            }
-
-            $events->where(function ($query) use ($user, $teacher) {
-                $query->whereHas('participants', function ($participantQuery) use ($user) {
-                    $participantQuery->where('users.id', $user->id);
-                })
-                    ->orWhereHas('bands', function ($bandQuery) use ($teacher) {
-                        $bandQuery->where('bands.teacher_id', $teacher->id);
-                    })
-                    ->orWhere('teacher_id', $teacher->id);
-            });
-        }
-
-        if ($user->role === UserRole::Parent) {
-            $guardian = $user->guardian;
-
-            if (! $guardian) {
-                abort(403);
-            }
-
-            $children = $guardian->students()->get();
-
-            $childrenUserIds = $children->pluck('user_id');
-            $childrenStudentIds = $children->pluck('id');
-
-            $childrenBandIds = Band::whereHas('students', function ($query) use ($childrenStudentIds) {
-                $query->whereIn('students.id', $childrenStudentIds);
-            })->pluck('bands.id');
-
-            $events->where(function ($query) use ($user, $childrenUserIds, $childrenBandIds) {
-                $query
-                    // guardian je priamo prihlásený na event
-                    ->whereHas('participants', function ($participantQuery) use ($user) {
-                        $participantQuery->where('users.id', $user->id);
-                    })
-
-                    // dieťa guardiana je priamo prihlásené na event
-                    ->orWhereHas('participants', function ($participantQuery) use ($childrenUserIds) {
-                        $participantQuery->whereIn('users.id', $childrenUserIds);
-                    })
-
-                    // dieťa guardiana je v kapele, ktorá vystupuje na evente
-                    ->orWhereHas('bands', function ($bandQuery) use ($childrenBandIds) {
-                        $bandQuery->whereIn('bands.id', $childrenBandIds);
-                    });
-            });
+        else {
+            $events = Event::with([
+                'participants',
+                'room',
+                'bands',
+                'responsibleTeacher.user',
+            ])
+                ->withCount('participants')
+                ->latest();
         }
 
         // Admin nič nefiltruje, vidí všetko.

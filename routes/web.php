@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\EventParticipantController;
 use App\Http\Controllers\GuardianController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\ProfileController;
@@ -67,4 +68,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('events/{event}/restore', [EventController::class, 'restore'])->name('events.restore')
         ->middleware('admin');
     Route::resource('events', EventController::class)->only('show')->withTrashed(['show']);
+    Route::get('my-events', [EventParticipantController::class, 'index'])
+        ->name('my-events');
+    Route::post('events/{event}/participants', [EventParticipantController::class, 'store'])
+        ->name('events.participants.store');
 });

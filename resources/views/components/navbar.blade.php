@@ -37,7 +37,13 @@
                             ])>
                         Učitelia
                     </a>
-
+                    <a href="{{ route('my-events') }}" @class([
+                                'rounded-md px-3 py-2 text-sm font-medium hover:bg-yellow-300 hover:text-black',
+                                'text-gray-300' => !request()->routeIs('events.index'),
+                                'text-black bg-yellow-300' => request()->routeIs('events.index'),
+                            ])>
+                        Moje udalosti
+                    </a>
                     @switch(auth()->user()->role)
                         @case(\App\Enums\UserRole::Admin)
                             <x-navbar.admin/>
@@ -122,6 +128,7 @@
                 <x-nav-link-phone href-name="students.index" :href="route('students.index')">Žiaci</x-nav-link-phone>
                 @endif
                 <x-nav-link-phone href="{{ route('teachers.index') }}" href-name="teachers">Učitelia</x-nav-link-phone>
+                <x-nav-link-phone :href="route('my-events')" href-name="my-events">Moje Udalosti</x-nav-link-phone>
                 @switch(auth()->user()->role)
                     @case(\App\Enums\UserRole::Admin)
                         <x-navbar.admin-mobile/>

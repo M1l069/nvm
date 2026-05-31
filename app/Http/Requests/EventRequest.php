@@ -41,10 +41,18 @@ class EventRequest extends FormRequest
             'street' => 'nullable|string|max:255|required_without:room',
             'city' => 'nullable|string|max:255|required_without:room',
             'country' => ['nullable','string', 'size:2', 'required_without:room', Rule::in(array_keys(__('countries')))],
-            'postal_code' => 'nullable|string|postal_code_for:country|required_without:room|postal_code:country',
+            'postal_code' => 'nullable|string|postal_code_for:country|required_without:room',
             'capacity' => 'nullable|integer|min:1|required_without:room',
             'description' => 'nullable|string',
             'is_public' => 'required|boolean',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'postal_code.postal_code' => 'Zadané PSČ nie je platné pre vybranú krajinu.',
+            'postal_code.postal_code_for' => 'PSČ musí zodpovedať vybranej krajine.',
         ];
     }
 

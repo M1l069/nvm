@@ -2,8 +2,6 @@
     @if($errors->any())
         <div class="mx-auto mt-8 w-full max-w-lg px-4">
             <div role="alert" class="rounded-md border-l-4 border-red-300 bg-red-100 p-4 text-red-700 opacity-75">
-                <p class="font-bold">Chyba validácie!</p>
-
                 <ul class="mt-2 list-disc pl-5">
                     @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
