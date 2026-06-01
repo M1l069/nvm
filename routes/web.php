@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BandController;
+use App\Http\Controllers\BandStudentController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventParticipantController;
 use App\Http\Controllers\GuardianController;
@@ -64,6 +65,11 @@ Route::middleware('auth')->group(function () {
 
     // Cesty pre kapely
     Route::resource('bands', BandController::class)->only('index');
+    Route::resource('bands', BandController::class)->only(['create', 'store', 'update', 'edit', 'destroy'])
+        ->middleware('admin-teacher');
+    Route::patch('bands/{band}/restore', [BandController::class, 'restore'])->name('bands.restore')->middleware('admin');
+    Route::resource('bands', BandController::class)->only('show')->withTrashed(['show']);
+    Route::resource('bands.students', BandStudentController::class)->only(['index', 'store', 'create', 'destroy', 'edit']);
 
     // Cesty pre udalosti
     Route::resource('events', EventController::class)->only('index');

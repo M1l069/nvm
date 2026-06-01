@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Band;
 use Illuminate\Http\Request;
 
 class BandStudentController extends Controller
@@ -9,7 +10,7 @@ class BandStudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Band $band)
     {
         //
     }

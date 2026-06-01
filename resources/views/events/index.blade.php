@@ -3,7 +3,7 @@
         <div class="mb-4 flex items-center justify-between">
             <div>
                 <h1 class="text-2xl font-semibold text-slate-800">Udalosti</h1>
-                <p class="text-sm text-slate-500">Prehľad všetkých Vašich udalostí.</p>
+                <p class="text-sm text-slate-500">Prehľad všetkých udalostí.</p>
             </div>
 
             @if(auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Teacher)

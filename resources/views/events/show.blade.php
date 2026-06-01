@@ -137,13 +137,13 @@
                         <a href="{{ route('teachers.show', $band->teacher) }}" class="text-slate-800 hover:text-blue-800">{{ $band->teacher->user->name }}</a>
                     </div>
                     <div class="col-span-2 flex justify-end">
-                        <a href="#" class="bg-yellow-300  {{-- {{ route('bands.show', $band) }} --}}
+                        <a href="{{ route('bands.show', $band) }}" class="bg-yellow-300
                         text-black py-2 px-2 rounded-md hover:bg-yellow-400">
                             Zobraziť
                         </a>
                     </div>
                     @if(!$loop->last)
-                        <hr class="border-slate-300 col-span-2">
+                        <hr class="border-slate-300 col-span-2 mb-4">
                     @endif
                 @empty
                     <p class="text-slate-800">Na udalosti nevystupujú kapely</p>
