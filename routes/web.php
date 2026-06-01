@@ -7,6 +7,8 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventParticipantController;
 use App\Http\Controllers\GuardianController;
 use App\Http\Controllers\Home\HomeController;
+use App\Http\Controllers\InstrumentController;
+use App\Http\Controllers\InstrumentReservationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomReservationController;
@@ -62,17 +64,28 @@ Route::middleware('auth')->group(function () {
     // Cesty pre predmety
 
     // Cesty pre miestnosti
-    Route::resource('rooms', RoomController::class)->only('index')->middleware('admin-teacher');
-
+    Route::resource('rooms', RoomController::class)->only('index')
+        ->middleware('admin-teacher');
     Route::resource('rooms', RoomController::class)->only(['edit', 'update','create' , 'store', 'destroy'])->middleware('admin');
     Route::resource('rooms', RoomController::class)->only('show')->withTrashed(['show']);
-
     Route::resource('rooms.reservations', RoomReservationController::class)->only(['index', 'create', 'store','edit','update' ,'destroy'])
         ->middleware('admin-teacher');
-
     Route::resource('rooms.reservations', RoomReservationController::class)
         ->only('show')->middleware('admin-teacher');
-    // Cesty pre rezervácie nástrojov
+
+    // Cesty pre nástroje
+    Route::resource('instruments', InstrumentController::class)->only('index')
+        ->middleware('admin-teacher');
+    Route::resource('instruments', InstrumentController::class)->only(['store', 'create', 'edit', 'update', 'destroy'])
+        ->middleware('admin');
+    Route::resource('instruments', InstrumentController::class)->only('show');
+
+    // Cesty pre rezervácie nástroja
+    Route::resource('instruments-reservations', InstrumentReservationController::class)
+        ->only(['index', 'create', 'store', 'edit', 'update', 'destroy'])
+        ->middleware('admin-teacher');
+    Route::resource('instruments-reservations', InstrumentReservationController::class)
+        ->only('show');
 
 
     // Cesty pre kapely

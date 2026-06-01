@@ -18,7 +18,6 @@ return new class extends Migration
             $table->dateTime('from');
             $table->dateTime('to');
             $table->text('description')->nullable();
-            $table->boolean('status')->default(false);
             $table->index(['room_id', 'from', 'to']);
             $table->timestamps();
         });

@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('instruments', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('serial_number')->unique()->nullable();
+            $table->string('manufacturer');
+            $table->string('model_name');
+            $table->string('serial_number')->unique();
             $table->foreignId('specialization_id')->nullable()
                 ->constrained('specializations')->nullOnDelete();
             $table->foreignId('room_id')->nullable()->constrained()->nullOnDelete();
             $table->boolean('is_available')->default(true);
-            $table->softDeletes();
             $table->timestamps();
         });
     }

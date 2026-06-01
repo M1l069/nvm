@@ -4,15 +4,15 @@ namespace App\Enums;
 
 enum InstrumentReservationStatus: string
 {
-    case Completed = 'Completed';
-    case Cancelled = 'Cancelled';
-    case Reserved = 'Reserved';
+    case Completed = 'completed';
+    case Active = 'Active';
+    case Overdue = 'overdue';
 
     public function label(): string {
         return match ($this) {
-            self::Reserved => 'Rezervované',
-            self::Cancelled => 'Zrušená',
-            self::Completed => 'Voľné'
+            self::Completed => 'Ukončená',
+            self::Active => 'Aktívna',
+            self::Overdue => 'Po termíne'
         };
     }
 }

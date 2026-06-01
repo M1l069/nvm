@@ -20,7 +20,7 @@ return new class extends Migration
             $table->dateTime('from');
             $table->dateTime('to');
             $table->text('description')->nullable();
-            $table->string('status')->default(InstrumentReservationStatus::Reserved);
+            $table->string('status');
             $table->index(['instrument_id', 'from', 'to']);
             $table->timestamps();
         });

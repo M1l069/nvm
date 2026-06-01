@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Enums\InstrumentReservationStatus;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[Fillable(['instrument_id', 'reserved_by', 'reserved_for', 'from', 'to', 'description', 'status'])]
 class InstrumentReservation extends Model
 {
     protected function casts(): array
@@ -12,6 +15,7 @@ class InstrumentReservation extends Model
         return [
             'from' => 'datetime',
             'to' => 'datetime',
+            'status' => InstrumentReservationStatus::class
         ];
     }
 
