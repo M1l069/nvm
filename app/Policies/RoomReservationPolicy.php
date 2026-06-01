@@ -2,27 +2,26 @@
 
 namespace App\Policies;
 
-use App\Enums\UserRole;
-use App\Models\Band;
+use App\Models\RoomReservation;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class BandPolicy
+class RoomReservationPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return false;
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Band $band): bool
+    public function view(User $user, RoomReservation $roomReservation): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -30,37 +29,37 @@ class BandPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role === UserRole::Admin || $user->role === UserRole::Teacher;
+        return false;
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Band $band): bool
+    public function update(User $user, RoomReservation $roomReservation): bool
     {
-        return $user->role === UserRole::Admin || ($user->role === UserRole::Teacher && $user->teacher->id === $band->teacher_id);
+        return false;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Band $band): bool
+    public function delete(User $user, RoomReservation $roomReservation): bool
     {
-        return $user->role === UserRole::Admin || ($user->role === UserRole::Teacher && $user->teacher->id === $band->teacher_id);
+        return false;
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user): bool
+    public function restore(User $user, RoomReservation $roomReservation): bool
     {
-        return $user->role === UserRole::Admin;
+        return false;
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Band $band): bool
+    public function forceDelete(User $user, RoomReservation $roomReservation): bool
     {
         return false;
     }

@@ -51,9 +51,10 @@ class BandController extends Controller
     {
         Gate::authorize('create', Band::class);
         $data = $request->validated();
+        $user = $request->user();
 
-        if(request()->user()->role === UserRole::Teacher) {
-            if($data['teacher'] !== request()->user()->teacher->id) {
+        if($user->role === UserRole::Teacher) {
+            if((int) $data['teacher'] !== $user->teacher->id) {
                 return redirect()->back()->with('error', 'Učiteľ môže ku kapele priradiť len seba');
             }
         }
@@ -62,7 +63,7 @@ class BandController extends Controller
             'teacher_id' => $data['teacher'],
             'name' => $data['name'],
             'capacity' => $data['capacity'],
-            'description' => $data['description']
+            'description' => $data['description'] ?? null
         ]);
 
         return redirect()->route('bands.show', $band)->with('success', 'Kapela úspešne vytvorená.');
@@ -83,7 +84,16 @@ class BandController extends Controller
      */
     public function edit(Band $band)
     {
-        //
+        Gate::authorize('update', $band);
+        if(auth()->user()->role === UserRole::Admin) {
+            $teachers = Teacher::with('user')->latest()->get();
+            return view('bands.edit', compact('band', 'teachers'));
+        }
+
+        if(auth()->user()->role === UserRole::Teacher) {
+            $teacher = auth()->user()->teacher->load('user');
+            return view('bands.edit', compact('band', 'teacher'));
+        }
     }
 
     /**
@@ -91,7 +101,23 @@ class BandController extends Controller
      */
     public function update(BandRequest $request, Band $band)
     {
-        //
+        Gate::authorize('update', $band);
+        $data = $request->validated();
+        $user = $request->user();
+        if($user->role === UserRole::Teacher) {
+            if((int) $data['teacher'] !== $user->teacher->id) {
+                return redirect()->back()
+                    ->with('error', 'Kapelu môže upraviť iba admin alebo učiteľ za ňu zodpovedný');
+            }
+        }
+        $band->update([
+            'teacher_id' => $data['teacher'],
+            'name' => $data['name'],
+            'capacity' => $data['capacity'],
+            'description' => $data['description'] ?? null
+        ]);
+        return redirect()->route('bands.show', $band)
+            ->with('success', 'Kapela úspešne upravená');
     }
 
     /**
@@ -99,11 +125,19 @@ class BandController extends Controller
      */
     public function destroy(Band $band)
     {
-        //
+        Gate::authorize('delete', $band);
+        $band->delete();
+        return redirect()->route('bands.index')
+            ->with('success', 'Kapela úspešne vymazaná.');
     }
 
     public function restore($band)
     {
+        $band = Band::withTrashed()->findOrFail($band);
+        Gate::authorize('restore', $band);
+        $band->restore();
+        return redirect()->route('bands.show', $band)
+            ->with('success', 'Kapela úspešne obnovená');
 
     }
 }

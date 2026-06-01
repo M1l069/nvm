@@ -63,13 +63,14 @@ Route::middleware('auth')->group(function () {
 
     // Cesty pre rezervácie nástrojov
 
+
     // Cesty pre kapely
     Route::resource('bands', BandController::class)->only('index');
     Route::resource('bands', BandController::class)->only(['create', 'store', 'update', 'edit', 'destroy'])
         ->middleware('admin-teacher');
     Route::patch('bands/{band}/restore', [BandController::class, 'restore'])->name('bands.restore')->middleware('admin');
     Route::resource('bands', BandController::class)->only('show')->withTrashed(['show']);
-    Route::resource('bands.students', BandStudentController::class)->only(['index', 'store', 'create', 'destroy', 'edit']);
+    Route::resource('bands.students', BandStudentController::class)->only(['index', 'store', 'create', 'destroy']);
 
     // Cesty pre udalosti
     Route::resource('events', EventController::class)->only('index');
