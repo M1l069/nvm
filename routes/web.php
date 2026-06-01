@@ -8,6 +8,8 @@ use App\Http\Controllers\EventParticipantController;
 use App\Http\Controllers\GuardianController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoomController;
+use App\Http\Controllers\RoomReservationController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
@@ -59,8 +61,17 @@ Route::middleware('auth')->group(function () {
 
     // Cesty pre predmety
 
-    // Cesty pre rezervácie miestností
+    // Cesty pre miestnosti
+    Route::resource('rooms', RoomController::class)->only('index')->middleware('admin-teacher');
 
+    Route::resource('rooms', RoomController::class)->only(['edit', 'update','create' , 'store', 'destroy'])->middleware('admin');
+    Route::resource('rooms', RoomController::class)->only('show')->withTrashed(['show']);
+
+    Route::resource('rooms.reservations', RoomReservationController::class)->only(['index', 'create', 'store','edit','update' ,'destroy'])
+        ->middleware('admin-teacher');
+
+    Route::resource('rooms.reservations', RoomReservationController::class)
+        ->only('show')->middleware('admin-teacher');
     // Cesty pre rezervácie nástrojov
 
 

@@ -169,6 +169,9 @@ return [
         'country' => 'Krajina',
         'birth_date' => 'Dátum narodenia',
         'band' => 'kapela',
-        'type' => 'typ'
+        'type' => 'typ',
+        'from' => 'od',
+        'to' => 'do',
+        'now' => 'teraz'
     ],
 ];

@@ -22,7 +22,7 @@ class RoomPolicy
      */
     public function view(User $user, Room $room): bool
     {
-        return false;
+        return $user->role === UserRole::Admin || $user->role === UserRole::Teacher;
     }
 
     /**
@@ -30,7 +30,7 @@ class RoomPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return  $user->role === UserRole::Admin;
     }
 
     /**
@@ -38,7 +38,7 @@ class RoomPolicy
      */
     public function update(User $user, Room $room): bool
     {
-        return false;
+        return  $user->role === UserRole::Admin;
     }
 
     /**
@@ -46,7 +46,7 @@ class RoomPolicy
      */
     public function delete(User $user, Room $room): bool
     {
-        return false;
+        return  $user->role === UserRole::Admin;
     }
 
     /**
@@ -54,7 +54,7 @@ class RoomPolicy
      */
     public function restore(User $user, Room $room): bool
     {
-        return false;
+        return  $user->role === UserRole::Admin;
     }
 
     /**

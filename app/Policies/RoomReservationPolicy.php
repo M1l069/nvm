@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\UserRole;
 use App\Models\RoomReservation;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -13,7 +14,7 @@ class RoomReservationPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $user->role === UserRole::Admin || $user->role === UserRole::Teacher;
     }
 
     /**
@@ -21,7 +22,7 @@ class RoomReservationPolicy
      */
     public function view(User $user, RoomReservation $roomReservation): bool
     {
-        return false;
+        return $user->role === UserRole::Admin || ($user->role === UserRole::Teacher && $user->id === $roomReservation->reservedBy->id);
     }
 
     /**
@@ -29,7 +30,7 @@ class RoomReservationPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->role === UserRole::Admin || $user->role === UserRole::Teacher;
     }
 
     /**
@@ -37,7 +38,8 @@ class RoomReservationPolicy
      */
     public function update(User $user, RoomReservation $roomReservation): bool
     {
-        return false;
+        return $user->role === UserRole::Admin || ($user->role === UserRole::Teacher &&
+            $user->id === $roomReservation->reservedBy->id);
     }
 
     /**
@@ -45,7 +47,8 @@ class RoomReservationPolicy
      */
     public function delete(User $user, RoomReservation $roomReservation): bool
     {
-        return false;
+        return $user->role === UserRole::Admin || ($user->role === UserRole::Teacher &&
+                $user->id === $roomReservation->reservedBy->id);
     }
 
     /**
