@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('subject_id')->constrained()->cascadeOnDelete();
             $table->foreignId('school_year_id')->constrained()->cascadeOnDelete();
             $table->foreignId('teacher_id')->constrained('teachers')->cascadeOnDelete();
+            $table->tinyInteger('capacity');
             $table->softDeletes();
             $table->timestamps();
             $table->index(['subject_id', 'school_year_id']);

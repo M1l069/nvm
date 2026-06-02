@@ -79,7 +79,7 @@ class EventParticipantController extends Controller
 
         if(!$event->participants()->where('users.id', $user->id)->exists()) {
             return redirect()->back()
-                ->with('error', 'Nemôžete sa prihlásiť na udalosť, na ktorú nie ste prihlásený');
+                ->with('error', 'Nemôžete sa odhlásiť z udalosti, na ktorú nie ste prihlásený');
         }
 
         $event->participants()->detach($user->id);

@@ -23,10 +23,20 @@ class StudentController extends Controller
     public function index()
     {
         Gate::authorize('viewAny', Student::class);
+        if(auth()->user()->role === UserRole::Admin) {
         $students = Student::withTrashed()->with('specialization.department',
             'bands', 'guardians')->latest()->paginate();
 
         return view('admin-teacher.students.index', compact('students'));
+        }
+
+        else {
+            $students = Student::with('specialization.department',
+                'bands', 'guardians')->latest()->paginate();
+
+            return view('admin-teacher.students.index', compact('students'));
+        }
+
     }
 
     /**
@@ -86,12 +96,23 @@ class StudentController extends Controller
     public function show(Student $student)
     {
         Gate::authorize('view', $student);
-        $student = $student->load(['specialization.department',
-            'guardians' => fn ($query) => $query->withTrashed(),
-            'guardians.user' => fn ($query) => $query->withTrashed(),
-            'bands']);
+        if(auth()->user()->role === UserRole::Admin) {
+            $student = $student->load(['specialization.department',
+                'guardians' => fn($query) => $query->withTrashed(),
+                'guardians.user' => fn($query) => $query->withTrashed(),
+                'bands']);
 
-        return view('admin.students.show', compact('student'));
+            return view('admin.students.show', compact('student'));
+        }
+
+        else {
+            $student = $student->load(['specialization.department',
+                'guardians',
+                'guardians.user',
+                'bands']);
+            return view('admin.students.show', compact('student'));
+        }
+
     }
 
     /**
@@ -190,34 +211,4 @@ class StudentController extends Controller
             ->with('success', 'Žiak bol trvalo vymazaný.');
     }
 
-//    private function generateUsername(string $firstName, string $lastName):string {
-//        $firstName = Str::ascii(Str::lower($firstName));
-//        $lastName = Str::ascii(Str::lower($lastName));
-//
-//        $firstName = preg_replace('/[^a-z]/', '', $firstName);
-//        $lastName = preg_replace('/[^a-z]/', '', $lastName);
-//
-//        $baseUsername = 'x' . $lastName;
-//
-//        if (!User::where('username', $baseUsername)->exists()) {
-//            return $baseUsername;
-//        }
-//
-//        for ($i = 1; $i <= strlen($firstName); $i++) {
-//            $username = $baseUsername . substr($firstName, 0, $i);
-//
-//            if (!User::where('username', $username)->exists()) {
-//                return $username;
-//            }
-//        }
-//
-//        $counter = 1;
-//
-//        do {
-//            $username = $baseUsername . $firstName . $counter;
-//            $counter++;
-//        } while (User::where('username', $username)->exists());
-//
-//        return $username;
-//    }
 }

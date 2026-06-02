@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Enums\UserRole;
 use App\Http\Requests\DepartmentRequest;
 use App\Models\Department;
+use App\Models\Specialization;
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -31,7 +33,17 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        return view('departments.create');
+        $user = auth()->user();
+        Gate::authorize('create', Department::class);
+        if($user->role === UserRole::Admin) {
+            $teachers = Teacher::latest()->get();
+            return view('departments.create', compact('teachers'));
+        }
+
+        else {
+            return redirect()->back()->with('error', 'Odbor môže vytvoriť len administrátor');
+        }
+
     }
 
     /**
@@ -44,6 +56,7 @@ class DepartmentController extends Controller
         $department = Department::create([
             'name'=> $data['name'],
             'description' => $data['description'],
+            'responsible_teacher_id' => $data['responsible_teacher_id'],
         ]);
 
         return redirect()->route('departments.show', $department)
@@ -65,8 +78,16 @@ class DepartmentController extends Controller
      */
     public function edit(Department $department)
     {
-        Gate::authorize('edit', $department);
-        return view('departments.edit', compact('department'));
+        $user = auth()->user();
+        Gate::authorize('update', $department);
+        if($user->role === UserRole::Admin) {
+            $teachers = Teacher::latest()->get();
+            return view('departments.edit', compact('department', 'teachers'));
+        }
+
+        $teachers = $user->teacher->id;
+        return view('departments.edit', compact('teachers'));
+
     }
 
     /**
@@ -74,7 +95,7 @@ class DepartmentController extends Controller
      */
     public function update(DepartmentRequest $request, Department $department)
     {
-        Gate::authorize('edit', $department);
+        Gate::authorize('update', $department);
         $data = $request->validated();
         $department->update([
             'name'=> $data['name'],

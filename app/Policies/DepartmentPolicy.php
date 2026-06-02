@@ -38,7 +38,7 @@ class DepartmentPolicy
      */
     public function update(User $user, Department $department): bool
     {
-        return $user->role === UserRole::Admin;
+        return $user->role === UserRole::Admin || ($user->role === UserRole::Teacher && $department->responsible_teacher_id === $user->teacher->id);
     }
 
     /**

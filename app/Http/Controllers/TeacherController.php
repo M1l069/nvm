@@ -22,13 +22,23 @@ class TeacherController extends Controller
     public function index()
     {
         Gate::authorize('viewAny', Teacher::class);
-        $teachers = Teacher::withTrashed()
-            ->with([
-                'user' => fn ($query) => $query->withTrashed(),
-                'specialization.department',
-                'bands',
-            ])->latest()
-            ->paginate();
+        if(auth()->user()->role === UserRole::Admin) {
+            $teachers = Teacher::withTrashed()
+                ->with([
+                    'user' => fn($query) => $query->withTrashed(),
+                    'specialization.department',
+                    'bands',
+                ])->latest()
+                ->paginate();
+        }
+        else {
+            $teachers = Teacher::with([
+                    'user',
+                    'specialization.department',
+                    'bands',
+                ])->latest()
+                ->paginate();
+        }
         return view('teachers.index', compact('teachers'));
     }
 

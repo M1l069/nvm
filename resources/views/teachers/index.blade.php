@@ -24,6 +24,7 @@
                 <th class="px-4 py-3 text-left text-sm font-semibold">Odbor</th>
                 <th class="px-4 py-3 text-left text-sm font-semibold">Špecializácia</th>
                 <th class="px-4 py-3 text-left text-sm font-semibold">Kapely učiteľa</th>
+                <th class="px-4 py-3 text-left text-sm font-semibold">Zobraziť</th>
                 @if(auth()->user()->role === \App\Enums\UserRole::Admin)
                     <th class="px-4 py-3 text-right text-sm font-semibold">Akcie</th>
                 @endif
@@ -39,7 +40,7 @@
                             </a>
                         </td>
                         <td class="px-4 py-3">
-                            <a href="mailto:{{ $teacher->user->email }}" class="hover:text-blue-800">{{ $teacher->user->email }}</a>
+                            <a href="mailto:{{ $teacher->user->email }}" class="hover:text-blue-800">{{ $teacher->user->email ?? '-' }}</a>
                         </td>
                         <td class="px-4 py-3">
                             {{ $teacher->specialization->department->name }}
@@ -53,6 +54,11 @@
                             @empty
                                 -
                             @endforelse
+                        </td>
+                        <td class="px-4 py-3">
+                            <a href="{{ route('teachers.show', $teacher) }}" class="text-blue-800 hover:text-blue-900">
+                                Zobraziť
+                            </a>
                         </td>
                         @if(auth()->user()->role === \App\Enums\UserRole::Admin)
                             <td class="px-4 py-3">
