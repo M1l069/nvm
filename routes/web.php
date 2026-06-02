@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BandController;
 use App\Http\Controllers\BandStudentController;
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventParticipantController;
 use App\Http\Controllers\GuardianController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\InstrumentReservationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomReservationController;
+use App\Http\Controllers\SpecializationController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
@@ -60,6 +62,21 @@ Route::middleware('auth')->group(function () {
     Route::patch('teachers/{teacher}/restore', [TeacherController::class, 'restore'])->name('teachers.restore')
         ->middleware('admin');
     Route::resource('teachers', TeacherController::class)->only('show')->withTrashed(['show']);
+
+    // Cesty pre špecializácie
+    Route::resource('specializations', SpecializationController::class)->only('index');
+    Route::resource('specializations', SpecializationController::class)->only(['store', 'create', 'destroy', 'update', 'edit'])
+        ->middleware('admin');
+    Route::resource('specializations', SpecializationController::class)->only('show')->withTrashed(['show']);
+    Route::patch('specializations/{specialization}/restore', [SpecializationController::class, 'restore'])->name('specializations.restore')
+        ->middleware('admin');
+
+    // Cesty pre Odbor
+    Route::resource('departments', DepartmentController::class)->only('index');
+    Route::resource('departments', DepartmentController::class)->only(['store', 'create', 'destroy', 'update', 'edit'])
+        ->middleware('admin');
+    Route::patch('departments/{department}/restore', [DepartmentController::class, 'restore'])->name('departments.restore');
+    Route::resource('departments', DepartmentController::class)->only('show')->withTrashed(['show']);
 
     // Cesty pre predmety
 

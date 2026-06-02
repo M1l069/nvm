@@ -56,6 +56,8 @@
                     </x-nav-link-phone>
                 @endif
                 <x-nav-link-phone href="{{ route('teachers.index') }}" href-name="teachers">Učitelia</x-nav-link-phone>
+                <x-nav-link-phone href="{{ route('departments.index') }}" href-name="departments">Odbory</x-nav-link-phone>
+                <x-nav-link-phone href="{{ route('specializations.index') }}" href-name="specializations">Špecializácie</x-nav-link-phone>
                 <x-nav-link-phone :href="route('my-events')" href-name="my-events">Moje Udalosti</x-nav-link-phone>
                 @switch(auth()->user()->role)
                     @case(\App\Enums\UserRole::Admin)

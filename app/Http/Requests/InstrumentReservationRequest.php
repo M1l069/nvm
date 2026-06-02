@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\InstrumentReservationStatus;
 use App\Enums\UserRole;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class InstrumentReservationRequest extends FormRequest
 {
@@ -23,12 +25,24 @@ class InstrumentReservationRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'instrument_id' => 'required|exists:instruments,id',
-            'reserved_for' => 'required|exists:users,id',
-            'from' => 'required|date|after_or_equal:now',
-            'to' => 'required|date|after:from',
-            'description' => 'nullable|string',
-        ];
+        if($this->isMethod('PUT')) {
+            return [
+                'instrument_id' => 'required|exists:instruments,id',
+                'reserved_for' => 'required|exists:users,id',
+                'from' => 'required|date|after_or_equal:now',
+                'to' => 'required|date|after:from',
+                'description' => 'nullable|string',
+                'status' => ['required', Rule::enum(InstrumentReservationStatus::class)]
+            ];
+        }
+        else {
+            return [
+                'instrument_id' => 'required|exists:instruments,id',
+                'reserved_for' => 'required|exists:users,id',
+                'from' => 'required|date|after_or_equal:now',
+                'to' => 'required|date|after:from',
+                'description' => 'nullable|string',
+            ];
+        }
     }
 }

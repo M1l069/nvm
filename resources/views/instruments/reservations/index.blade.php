@@ -53,7 +53,17 @@
                         {{ $reservation->description ?? '-'}}
                     </td>
                     <td class="px-4 py-3">
-                        {{ $reservation->status }}
+                        @switch($reservation->status)
+                            @case(\App\Enums\InstrumentReservationStatus::Active)
+                                <p class="text-green-500">{{ $reservation->status->label() }}</p>
+                                @break
+                            @case(\App\Enums\InstrumentReservationStatus::Overdue)
+                                <p class="text-red-500">{{ $reservation->status->label() }}</p>
+                                @break
+                            @case(\App\Enums\InstrumentReservationStatus::Completed)
+                                <p class="text-green-500">{{ $reservation->status->label() }}</p>
+                                @break
+                        @endswitch
                     </td>
                     @if(auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Teacher)
                         <td class="px-4 py-3">

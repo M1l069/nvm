@@ -67,7 +67,8 @@ class InstrumentReservationController extends Controller
             'status' => InstrumentReservationStatus::Active->value
         ]);
 
-        return redirect()->route('instruments-reservations.show', $reservation);
+        return redirect()->route('instruments-reservations.show', $reservation)
+            ->with('success', 'Rezervácia úspešne vytvorená.');
 
     }
 
@@ -115,6 +116,13 @@ class InstrumentReservationController extends Controller
                 ->with('error', 'Nástroj je v danom časovom rozmedzí požičaný alebo ešte nebol vrátený');
         }
 
+        if($data['status'] === InstrumentReservationStatus::Completed){
+            $instrument = Instrument::findOrFail($data['instrument_id']);
+            $instrument->update([
+                'is_available' => true
+            ]);
+        }
+
         $instruments_reservation->update([
             'instrument_id' => $data['instrument_id'],
             'reserved_by' => auth()->user()->id,
@@ -122,15 +130,25 @@ class InstrumentReservationController extends Controller
             'from' => $from,
             'to' => $to,
             'description' => $data['description'],
-            'status'
+            'status' => $data['status']
         ]);
+
+        return redirect()->route('instruments-reservations.show', $instruments_reservation)
+            ->with('success', 'Rezervácia nástroja úspešne upravená.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(InstrumentReservation $instruments_reservation)
     {
-        //
+        Gate::authorize('delete', $instruments_reservation);
+        $instrument = Instrument::findOrFail($instruments_reservation->instrument->id);
+        $instrument->update([
+            'is_available' => true
+        ]);
+        $instruments_reservation->delete();
+        return redirect()->route('instruments-reservations.index')
+            ->with('success', 'Rezervácia nástroja úspešne vymazaná');
     }
 }

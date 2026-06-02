@@ -64,14 +64,14 @@
     </div>
 
         <div>
-            <x-form.label name="type" :required="true">Stav rezervácie:</x-form.label>
+            <x-form.label name="status" :required="true">Stav rezervácie:</x-form.label>
             <select
-                name="type"
-                id="type"
+                name="status"
+                id="status"
                 @class(['w-full rounded-md  px-4 py-2 text-base
                 focus:border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200',
-                'border border-slate-300' => !$errors->has('type'),
-                'border border-red-500' => $errors->has('type')])>
+                'border border-slate-300' => !$errors->has('status'),
+                'border border-red-500' => $errors->has('status')])>
                 <option value="">--Vyberte stav rezervácie--</option>
 
                 @foreach(\App\Enums\InstrumentReservationStatus::cases() as $type)
@@ -83,7 +83,7 @@
                 @endforeach
             </select>
             <div>
-                @error('type')
+                @error('status')
                 <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                 @enderror
             </div>

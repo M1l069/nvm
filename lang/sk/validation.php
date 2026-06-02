@@ -172,6 +172,8 @@ return [
         'type' => 'typ',
         'from' => 'od',
         'to' => 'do',
-        'now' => 'teraz'
+        'now' => 'teraz',
+        'name' => 'názov',
+        'description' => 'popis'
     ],
 ];

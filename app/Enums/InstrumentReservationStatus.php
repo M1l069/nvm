@@ -5,7 +5,7 @@ namespace App\Enums;
 enum InstrumentReservationStatus: string
 {
     case Completed = 'completed';
-    case Active = 'Active';
+    case Active = 'active';
     case Overdue = 'overdue';
 
     public function label(): string {
