@@ -52,9 +52,9 @@
                     </form>
                 </div>
             @endif
-            @if($instrument->is_available)
+            @if($instrument->is_available && (auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Teacher))
                 <div class="flex justify-start">
-                    <a href="#" class="mt-4 bg-yellow-300 text-black py-2 px-2 rounded-md hover:bg-yellow-400">
+                    <a href="{{ route('instruments-reservations.create') }}" class="mt-4 bg-yellow-300 text-black py-2 px-2 rounded-md hover:bg-yellow-400">
                         Rezervovať
                     </a>
                 </div>

@@ -59,6 +59,7 @@
                 <x-nav-link-phone href="{{ route('departments.index') }}" href-name="departments">Odbory</x-nav-link-phone>
                 <x-nav-link-phone href="{{ route('specializations.index') }}" href-name="specializations">Špecializácie</x-nav-link-phone>
                 <x-nav-link-phone :href="route('my-events')" href-name="my-events">Moje Udalosti</x-nav-link-phone>
+                <x-nav-link-phone :href="route('instrument-reservations.my')" href-name="instrument-reservations.my">Moje rezervácie nástrojov</x-nav-link-phone>
                 @switch(auth()->user()->role)
                     @case(\App\Enums\UserRole::Admin)
                         <x-navbar.admin-mobile/>

@@ -103,6 +103,7 @@ Route::middleware('auth')->group(function () {
         ->middleware('admin-teacher');
     Route::resource('instruments-reservations', InstrumentReservationController::class)
         ->only('show');
+    Route::get('my-reservations', [InstrumentReservationController::class, 'myReservations'])->name('instrument-reservations.my');
 
 
     // Cesty pre kapely

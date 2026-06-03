@@ -151,4 +151,11 @@ class InstrumentReservationController extends Controller
         return redirect()->route('instruments-reservations.index')
             ->with('success', 'Rezervácia nástroja úspešne vymazaná');
     }
+
+    public function myReservations() {
+        $user = auth()->user();
+        $instruments_reservations = InstrumentReservation::where('reserved_for', $user->id)->with('instrument', 'reservedFor', 'reservedBy')
+            ->latest()->get();
+        return view('instruments-reservations.my-reservations', compact('instruments_reservations'));
+    }
 }
